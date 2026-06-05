@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>创意工坊 — 福宝 IP 设计助手</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #1477FF; --blue-light: #ECF5FF; --blue-hover: #005EE6;
+  --orange: #FF6B3D; --orange-light: #FFF3EE;
+  --bg: #F5F9FF; --card: #fff; --text: #05070D; --text2: #596276; --text3: #8B95A7;
+  --border: #DDEBFA; --border-light: #EAF2FC;
+  --success: #16C964; --success-bg: #F0FFF6;
+  --error: #F43F3F; --error-bg: #FFF5F5;
+  --shadow: 0 1px 4px rgba(0,0,0,0.04), 0 2px 12px rgba(0,0,0,0.03);
+  --radius: 16px; --radius-sm: 10px;
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:"Inter",-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--text); min-height:100vh; line-height:1.6; -webkit-font-smoothing:antialiased; }
+::-webkit-scrollbar { width:8px; } ::-webkit-scrollbar-track { background:transparent; } ::-webkit-scrollbar-thumb { background:#CDD3DE; border-radius:4px; }
+
+.header { background:rgba(255,255,255,0.86); padding:0 40px; height:72px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(216,229,245,0.8); position:sticky; top:0; z-index:100; backdrop-filter:blur(14px); }
+.header-left { display:flex; align-items:center; gap:14px; }
+.header-left a { text-decoration:none; color:inherit; }
+.header-left h1 { font-size:22px; font-weight:800; }
+.back-link { font-size:14px; color:var(--text3); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color var(--transition); }
+.back-link:hover { color:var(--blue); }
+
+.tab-bar { background:#fff; border-bottom:1px solid var(--border); padding:0 40px; display:flex; gap:4px; position:sticky; top:72px; z-index:99; }
+.tab { padding:14px 22px; font-size:14px; font-weight:550; color:var(--text2); cursor:pointer; border:none; background:none; border-bottom:2.5px solid transparent; transition:all var(--transition); font-family:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
+.tab:hover { color:var(--blue); background:var(--blue-light); }
+.tab.active { color:var(--blue); border-bottom-color:var(--blue); font-weight:650; }
+
+.container { max-width:1040px; margin:32px auto; padding:0 28px; }
+.card { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border-light); padding:32px; margin-bottom:24px; }
+.card-header { margin-bottom:22px; }
+.card-header h2 { font-size:22px; font-weight:800; margin-bottom:4px; }
+.card-header .subtitle { font-size:13px; color:var(--text3); }
+
+.form-group { margin-bottom:18px; }
+.form-group label { display:block; font-size:13px; font-weight:600; margin-bottom:6px; color:var(--text); }
+.form-group textarea { width:100%; padding:12px 16px; border:1.5px solid var(--border); border-radius:var(--radius-sm); font-size:14px; font-family:inherit; color:var(--text); background:#FAFBFC; resize:vertical; min-height:120px; line-height:1.7; transition:all var(--transition); }
+.form-group textarea:focus { outline:none; border-color:var(--blue); background:#fff; box-shadow:0 0 0 3px rgba(20,119,255,0.06); }
+
+.btn { display:inline-flex; align-items:center; gap:7px; padding:11px 28px; border:none; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit; transition:all var(--transition); }
+.btn-primary { background:#000; color:#fff; box-shadow:0 10px 24px rgba(0,0,0,0.12); }
+.btn-primary:hover { background:#1a1a1a; transform:translateY(-1px); box-shadow:0 12px 28px rgba(0,0,0,0.16); }
+.btn-primary:disabled { opacity:0.55; cursor:not-allowed; transform:none; box-shadow:none; }
+
+.result { display:none; margin-top:22px; }
+.result.show { display:block; animation:fadeIn 0.3s ease-out; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.result-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; }
+.result-item { background:#FAFBFC; border-radius:var(--radius-sm); padding:16px; border:1px solid var(--border-light); }
+.result-item .label { font-size:11px; color:var(--text3); margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px; font-weight:600; }
+.result-item .value { font-size:15px; font-weight:650; color:var(--text); }
+.creative-section { margin-top:22px; }
+.creative-section h3 { font-size:15px; font-weight:700; margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid var(--border-light); }
+.creative-section p, .creative-section li { font-size:14px; color:var(--text2); line-height:1.8; }
+.creative-section ul { padding-left:20px; }
+.error-msg { background:var(--error-bg); border:1px solid #FCC; border-radius:var(--radius-sm); padding:11px 16px; color:var(--error); font-size:13px; margin-top:12px; display:none; }
+.spinner { display:inline-block; width:18px; height:18px; border:2px solid rgba(255,255,255,0.3); border-top-color:#fff; border-radius:50%; animation:spin .8s linear infinite; vertical-align:middle; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.footer { text-align:center; padding:28px; color:var(--text3); font-size:13px; border-top:1px solid var(--border-light); margin-top:48px; }
+
+@media(max-width:640px) {
+  .header { padding:0 20px; } .tab-bar { padding:0 20px; overflow-x:auto; }
+  .tab { padding:12px 14px; font-size:12px; white-space:nowrap; }
+  .container { padding:0 16px; } .card { padding:24px; }
+  .header-left h1 { font-size:18px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left"><a href="./index.html"><h1>福宝 IP 设计助手</h1></a></div>
+  <a href="./index.html" class="back-link">← 返回首页</a>
+</header>
+
+<nav class="tab-bar">
+  <a class="tab" href="./advise.html">🎯 规范顾问</a>
+  <a class="tab" href="./prompt.html">✨ 提示词生成</a>
+  <a class="tab active" href="./create.html">💡 创意工坊</a>
+  <a class="tab" href="./assets.html">🖼️ 素材库</a>
+  <a class="tab" href="./handbook.html">📖 IP规范手册</a>
+</nav>
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h2>创意工坊</h2>
+      <p class="subtitle" id="subtitle">AI 基于 IP 规范和人设，为你的业务需求生成创意方案</p>
+    </div>
+
+    <!-- 待接入面板 -->
+    <div id="setup-panel" style="display:none;background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border-radius:var(--radius-sm);padding:24px;text-align:center;margin-bottom:18px">
+      <div style="font-size:36px;margin-bottom:8px">🔑</div>
+      <h3 style="font-size:16px;font-weight:700;margin-bottom:6px">AI 功能待接入</h3>
+      <p style="font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:12px">
+        配置 API Key 即可启用创意工坊<br>
+        <strong>推荐：Google Gemini（免费，无需信用卡）</strong>
+      </p>
+      <div style="display:flex;gap:8px;max-width:480px;margin:0 auto 8px">
+        <input id="api-key-input" type="password" placeholder="粘贴 GEMINI_API_KEY 或 ANTHROPIC_API_KEY" style="flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit">
+        <button class="btn btn-primary" onclick="saveKey()" style="white-space:nowrap;font-size:13px">💾 保存</button>
+      </div>
+      <p style="font-size:11px;color:var(--text3)">
+        Key 仅存于浏览器本地，不上传服务器 |
+        <a href="https://aistudio.google.com/" target="_blank" style="color:var(--blue)">免费获取 Gemini Key →</a>
+      </p>
+    </div>
+
+    <!-- 正常表单 -->
+    <div id="main-form">
+      <div class="form-group">
+        <label>业务需求</label>
+        <textarea id="create-input" placeholder="例如：58好借双11活动，面向新市民，主打利率优惠，需要IP在弹窗和活动页面出现..."></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="submit()">💡 生成创意方案</button>
+    </div>
+    <div id="error-msg" class="error-msg"></div>
+    <div id="result" class="result"></div>
+  </div>
+</div>
+
+<div class="footer">58数科 福宝IP设计助手</div>
+
+<script>
+let aiReady = false;
+const STORAGE_KEY = 'fubao_api_key';
+
+// 初始化
+(async function init() {
+  // 检查服务器 AI 状态
+  try {
+    const st = await fetch('/api/status').then(r => r.json());
+    aiReady = st.aiAvailable;
+  } catch (e) { aiReady = false; }
+
+  // 检查浏览器本地是否有 Key
+  const savedKey = localStorage.getItem(STORAGE_KEY);
+  if (savedKey) {
+    document.getElementById('api-key-input').value = savedKey;
+  }
+
+  if (!aiReady) {
+    document.getElementById('setup-panel').style.display = 'block';
+    document.getElementById('subtitle').textContent = '配置 API Key 后即可使用 AI 创意生成';
+  }
+})();
+
+function saveKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key) return;
+  localStorage.setItem(STORAGE_KEY, key);
+  // 提示用户设置环境变量
+  document.getElementById('setup-panel').innerHTML = `
+    <div style="font-size:36px;margin-bottom:8px">✅</div>
+    <h3 style="font-size:16px;font-weight:700;margin-bottom:6px">Key 已保存到浏览器</h3>
+    <p style="font-size:13px;color:var(--text2);line-height:1.8">
+      需要将 Key 配置到服务器环境变量才能使用：<br>
+      <code style="background:#f0f0f0;padding:4px 8px;border-radius:4px;font-size:12px">export GEMINI_API_KEY="${key.substring(0,12)}..."</code><br>
+      然后重启服务：<code style="background:#f0f0f0;padding:4px 8px;border-radius:4px;font-size:12px">npm start</code>
+    </p>
+    <button class="btn btn-primary" onclick="location.reload()" style="font-size:13px">🔄 刷新检查</button>
+  `;
+}
+
+async function submit() {
+  const v = document.getElementById('create-input').value.trim();
+  const errEl = document.getElementById('error-msg');
+  if (!v) { errEl.textContent = '请输入业务需求'; errEl.style.display = 'block'; return; }
+  errEl.style.display = 'none';
+  const btn = document.querySelector('#main-form .btn-primary');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> 生成中...';
+
+  try {
+    const headers = { 'Content-Type': 'application/json' };
+    const savedKey = localStorage.getItem(STORAGE_KEY);
+    if (savedKey) headers['x-api-key'] = savedKey;
+
+    const d = await fetch('/api/create', { method:'POST', headers, body:JSON.stringify({requirement:v}) })
+      .then(r => r.ok ? r.json() : (async()=>{const e=await r.json();throw new Error(e.error||'请求失败')})());
+
+    let html = '';
+    const fields = [['创意方向','creativeDirection'],['表情','expression'],['动作','action'],['道具','prop'],['穿搭','outfit'],['背景','background']];
+    html += `<div class="section-title" style="font-size:14px;font-weight:700;margin-bottom:10px">🎨 创意方案</div><div class="result-grid">`;
+    fields.forEach(([label,key]) => { if (d[key]) html += `<div class="result-item"><div class="label">${label}</div><div class="value">${esc(d[key])}</div></div>`; });
+    html += `</div>`;
+    if (d.prompts && d.prompts.length) { html += `<div class="creative-section"><h3>📝 生成 Prompt</h3><ul>`; d.prompts.forEach(p => { html += `<li style="margin:6px 0;padding:10px 14px;background:#FAFBFC;border-radius:8px;font-family:monospace;font-size:13px">${esc(p)}</li>`; }); html += `</ul></div>`; }
+    if (d.usageNote) html += `<div class="creative-section"><h3>📋 应用说明</h3><p>${esc(d.usageNote)}</p></div>`;
+    if (d.raw) html += `<div class="creative-section"><h3>📄 原始响应</h3><p style="white-space:pre-wrap;font-size:12px">${esc(d.raw)}</p></div>`;
+
+    document.getElementById('result').innerHTML = html;
+    document.getElementById('result').classList.add('show');
+  } catch(e) {
+    if (e.message.includes('API Key') || e.message.includes('API_KEY')) {
+      document.getElementById('setup-panel').style.display = 'block';
+      errEl.textContent = '请先配置 API Key';
+    }
+    errEl.textContent = e.message; errEl.style.display = 'block';
+  } finally {
+    btn.disabled = false; btn.innerHTML = '💡 生成创意方案';
+  }
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = String(s); return d.innerHTML; }
+</script>
+</body>
+</html>

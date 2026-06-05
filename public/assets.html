@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IP素材库 — 福宝 IP 设计助手</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #1477FF; --blue-light: #ECF5FF; --blue-hover: #005EE6;
+  --orange: #FF6B3D; --orange-light: #FFF3EE;
+  --bg: #F5F9FF; --card: #fff; --text: #05070D; --text2: #596276; --text3: #8B95A7;
+  --border: #DDEBFA; --border-light: #EAF2FC;
+  --success: #16C964; --success-bg: #F0FFF6; --error: #F43F3F; --error-bg: #FFF5F5;
+  --shadow: 0 1px 4px rgba(0,0,0,0.04), 0 2px 12px rgba(0,0,0,0.03);
+  --radius: 16px; --radius-sm: 10px;
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:"Inter",-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--text); min-height:100vh; line-height:1.6; -webkit-font-smoothing:antialiased; }
+::-webkit-scrollbar { width:8px; } ::-webkit-scrollbar-track { background:transparent; } ::-webkit-scrollbar-thumb { background:#CDD3DE; border-radius:4px; }
+
+.header { background:rgba(255,255,255,0.86); padding:0 40px; height:72px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(216,229,245,0.8); position:sticky; top:0; z-index:100; backdrop-filter:blur(14px); }
+.header-left { display:flex; align-items:center; gap:14px; } .header-left a { text-decoration:none; color:inherit; } .header-left h1 { font-size:22px; font-weight:800; }
+.back-link { font-size:14px; color:var(--text3); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color var(--transition); } .back-link:hover { color:var(--blue); }
+
+.tab-bar { background:#fff; border-bottom:1px solid var(--border); padding:0 40px; display:flex; gap:4px; position:sticky; top:72px; z-index:99; }
+.tab { padding:14px 22px; font-size:14px; font-weight:550; color:var(--text2); cursor:pointer; border:none; background:none; border-bottom:2.5px solid transparent; transition:all var(--transition); font-family:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
+.tab:hover { color:var(--blue); background:var(--blue-light); } .tab.active { color:var(--blue); border-bottom-color:var(--blue); font-weight:650; }
+
+.container { max-width:1040px; margin:32px auto; padding:0 28px; }
+.card { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border-light); padding:28px; margin-bottom:24px; }
+.card-header { margin-bottom:20px; } .card-header h2 { font-size:22px; font-weight:800; margin-bottom:4px; }
+.card-header .subtitle { font-size:13px; color:var(--text3); }
+
+/* Upload Zone */
+.upload-zone { border:2px dashed var(--border); border-radius:var(--radius-sm); padding:28px; text-align:center; background:#FAFBFC; transition:all var(--transition); cursor:pointer; margin-bottom:20px; }
+.upload-zone:hover { border-color:var(--blue); background:var(--blue-light); }
+.upload-zone.drag-over { border-color:var(--blue); background:var(--blue-light); box-shadow:0 0 0 3px rgba(20,119,255,0.08); }
+.upload-zone .upload-icon { font-size:32px; margin-bottom:8px; }
+.upload-zone p { font-size:13px; color:var(--text2); }
+.upload-zone .hint { font-size:11px; color:var(--text3); margin-top:4px; }
+.upload-zone input[type=file] { display:none; }
+.upload-progress { display:none; text-align:center; padding:8px; font-size:13px; color:var(--blue); }
+
+/* Asset Grid */
+.asset-count { font-size:13px; color:var(--text3); margin-bottom:14px; }
+.asset-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:14px; }
+.asset-card { position:relative; border:1px solid var(--border-light); border-radius:var(--radius-sm); overflow:hidden; background:#fff; transition:all var(--transition); }
+.asset-card:hover { border-color:#CDD3DE; box-shadow:0 4px 16px rgba(0,0,0,0.08); transform:translateY(-2px); }
+.asset-card:hover .card-actions { opacity:1; }
+.asset-card .img-wrap { aspect-ratio:1; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#FAFBFC; }
+.asset-card .img-wrap img { max-width:100%; max-height:100%; object-fit:contain; }
+.asset-card .card-actions { position:absolute; top:6px; right:6px; display:flex; gap:4px; opacity:0; transition:opacity var(--transition); }
+.asset-card .card-actions button { width:32px; height:32px; border:none; border-radius:6px; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.92); box-shadow:0 2px 8px rgba(0,0,0,0.12); transition:all var(--transition); }
+.asset-card .card-actions button:hover { background:var(--blue); color:#fff; }
+.asset-card .info { padding:10px 12px; }
+.asset-card .info .fname { font-size:11px; color:var(--text2); word-break:break-all; line-height:1.4; }
+.asset-card .info .meta { font-size:10px; color:var(--text3); margin-top:2px; }
+.loading { text-align:center; padding:48px; color:var(--text3); grid-column:1/-1; }
+.footer { text-align:center; padding:28px; color:var(--text3); font-size:13px; border-top:1px solid var(--border-light); margin-top:48px; }
+
+@media(max-width:640px) {
+  .header { padding:0 20px; } .tab-bar { padding:0 20px; overflow-x:auto; }
+  .tab { padding:12px 14px; font-size:12px; white-space:nowrap; }
+  .container { padding:0 16px; } .card { padding:20px; }
+  .asset-grid { grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); }
+  .header-left h1 { font-size:18px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left"><a href="./index.html"><h1>福宝 IP 设计助手</h1></a></div>
+  <a href="./index.html" class="back-link">← 返回首页</a>
+</header>
+
+<nav class="tab-bar">
+  <a class="tab" href="./advise.html">🎯 规范顾问</a>
+  <a class="tab" href="./prompt.html">✨ 提示词生成</a>
+  <a class="tab" href="./create.html">💡 创意工坊</a>
+  <a class="tab active" href="./assets.html">🖼️ 素材库</a>
+  <a class="tab" href="./handbook.html">📖 IP规范手册</a>
+</nav>
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h2>IP 素材库</h2>
+      <p class="subtitle">福宝 IP 形象素材，支持上传和下载</p>
+    </div>
+
+    <!-- 上传区域 -->
+    <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+      <div class="upload-icon">📤</div>
+      <p>点击上传或拖拽图片到这里</p>
+      <p class="hint">支持 PNG / JPG / GIF / WebP</p>
+      <input type="file" id="file-input" accept="image/png,image/jpeg,image/gif,image/webp" multiple onchange="handleFiles(this.files)">
+    </div>
+    <div class="upload-progress" id="upload-progress"></div>
+
+    <!-- 素材数量 -->
+    <div class="asset-count" id="asset-count"></div>
+
+    <!-- 素材网格 -->
+    <div class="asset-grid" id="asset-grid">
+      <div class="loading">加载中...</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">58数科 福宝IP设计助手</div>
+
+<script>
+let allData = [];
+
+async function load() {
+  try {
+    const d = await fetch('/api/materials').then(r => r.json());
+    allData = d.groups || [];
+    render(allData);
+    let total = 0; allData.forEach(g => total += g.count);
+    document.getElementById('asset-count').textContent = `共 ${total} 个素材`;
+  } catch(e) {
+    document.getElementById('asset-grid').innerHTML = `<div class="loading">加载失败: ${e.message}</div>`;
+  }
+}
+
+function render(groups) {
+  const grid = document.getElementById('asset-grid');
+  if (!groups.length) { grid.innerHTML = '<div class="loading">暂无素材，上传第一张吧 👆</div>'; return; }
+  let html = '';
+  groups.forEach(g => {
+    g.files.forEach(f => {
+      html += `<div class="asset-card">
+        <div class="img-wrap"><img src="./assets/${f.file}" alt="${f.file}" loading="lazy" onerror="this.parentElement.innerHTML='📷'"></div>
+        <div class="card-actions">
+          <button title="下载" onclick="downloadAsset('${f.file}')">⬇</button>
+          <button title="删除" onclick="deleteAsset('${f.file}')">🗑</button>
+        </div>
+        <div class="info">
+          <div class="fname">${f.file}</div>
+          <div class="meta">${f.width}×${f.height} · ${f.sizeKB}KB</div>
+        </div>
+      </div>`;
+    });
+  });
+  grid.innerHTML = html;
+}
+
+// 删除
+async function deleteAsset(filename) {
+  if (!confirm(`确定删除 ${filename}？此操作不可恢复。`)) return;
+  try {
+    const r = await fetch(`/api/materials/${encodeURIComponent(filename)}`, { method: 'DELETE' }).then(r => r.json());
+    if (r.error) throw new Error(r.error);
+    load(); // 刷新列表
+  } catch(e) { alert('删除失败: ' + e.message); }
+}
+
+// 下载
+function downloadAsset(filename) {
+  const a = document.createElement('a');
+  a.href = './assets/' + filename;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+// 拖拽上传
+const zone = document.getElementById('upload-zone');
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); handleFiles(e.dataTransfer.files); });
+
+// 处理上传
+async function handleFiles(files) {
+  const progressEl = document.getElementById('upload-progress');
+  progressEl.style.display = 'block';
+  let uploaded = 0;
+
+  for (const file of files) {
+    if (!file.type.startsWith('image/')) continue;
+    progressEl.textContent = `上传中 ${uploaded + 1}/${files.length}: ${file.name}...`;
+
+    const reader = new FileReader();
+    const dataUrl = await new Promise(resolve => {
+      reader.onload = e => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    });
+
+    try {
+      const res = await fetch('/api/materials/upload', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename: file.name, data: dataUrl, category: '用户上传' })
+      }).then(r => r.json());
+      if (res.error) throw new Error(res.error);
+      uploaded++;
+    } catch(e) {
+      progressEl.textContent = `❌ ${file.name}: ${e.message}`;
+      setTimeout(() => { progressEl.style.display = 'none'; }, 2000);
+      return;
+    }
+  }
+
+  progressEl.textContent = `✅ 成功上传 ${uploaded} 张图片`;
+  setTimeout(() => { progressEl.style.display = 'none'; }, 2000);
+  load(); // 刷新列表
+}
+
+load();
+</script>
+</body>
+</html>
