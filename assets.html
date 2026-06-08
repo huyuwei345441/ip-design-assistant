@@ -117,6 +117,12 @@ body { font-family:"Inter",-apple-system,BlinkMacSystemFont,"PingFang SC","Micro
 <script>
 let allData = [];
 
+// localStorage helpers for static deployment
+function getUserUploads() { try { const s = localStorage.getItem('userAssets'); return s ? JSON.parse(s) : []; } catch(e) { return []; } }
+function saveUserUploads(files) { localStorage.setItem('userAssets', JSON.stringify(files)); }
+function getDeletedFiles() { try { const s = localStorage.getItem('deletedAssets'); return s ? JSON.parse(s) : []; } catch(e) { return []; } }
+function saveDeletedFiles(files) { localStorage.setItem('deletedAssets', JSON.stringify(files)); }
+
 // Mock data for static deployment - all actual assets
 const mockAssets = [
   { name: 'IP基础形象', files: [
@@ -201,19 +207,28 @@ const mockAssets = [
 
 async function load() {
   try {
-    // Try API first, fallback to mock data
     const d = await fetch('/api/materials').then(r => r.json());
-    allData = d.groups || mockAssets;
-    render(allData);
-    let total = 0; allData.forEach(g => total += g.count);
-    document.getElementById('asset-count').textContent = `共 ${total} 个素材`;
+    allData = d.groups || JSON.parse(JSON.stringify(mockAssets));
   } catch(e) {
-    // Fallback to mock data
-    allData = mockAssets;
-    render(allData);
-    let total = 0; allData.forEach(g => total += g.count);
-    document.getElementById('asset-count').textContent = `共 ${total} 个素材`;
+    allData = JSON.parse(JSON.stringify(mockAssets));
   }
+  
+  // Apply user uploads from localStorage
+  const userUploads = getUserUploads();
+  if (userUploads.length) {
+    let userGroup = allData.find(g => g.name === '用户上传');
+    if (!userGroup) { userGroup = { name: '用户上传', files: [], count: 0 }; allData.push(userGroup); }
+    userUploads.forEach(u => { if (!userGroup.files.find(f => f.file === u.file)) { userGroup.files.push(u); userGroup.count++; } });
+  }
+  
+  // Apply deleted files filter
+  const deletedFiles = getDeletedFiles();
+  allData.forEach(g => { g.files = g.files.filter(f => !deletedFiles.includes(f.file)); g.count = g.files.length; });
+  allData = allData.filter(g => g.files.length > 0);
+  
+  render(allData);
+  const total = allData.reduce((sum, g) => sum + g.count, 0);
+  document.getElementById('asset-count').textContent = `共 ${total} 个素材`;
 }
 
 function render(groups) {
@@ -222,10 +237,11 @@ function render(groups) {
   let html = '';
   groups.forEach(g => {
     g.files.forEach(f => {
+      const src = f.dataUrl ? f.dataUrl : '/assets/' + f.file;
       html += `<div class="asset-card">
-        <div class="img-wrap"><img src="./assets/${f.file}" alt="${f.file}" loading="lazy" onerror="this.parentElement.innerHTML='📷'"></div>
+        <div class="img-wrap"><img src="${src}" alt="${f.file}" loading="lazy" onerror="this.parentElement.innerHTML='📷'"></div>
         <div class="card-actions">
-          <button title="下载" onclick="downloadAsset('${f.file}')">⬇</button>
+          <button title="下载" onclick="downloadAsset('${f.file}', ${f.dataUrl ? "'" + f.dataUrl + "'" : 'null'})">⬇</button>
           <button title="删除" onclick="deleteAsset('${f.file}')">🗑</button>
         </div>
         <div class="info">
@@ -242,16 +258,16 @@ function render(groups) {
 async function deleteAsset(filename) {
   if (!confirm(`确定删除 ${filename}？此操作不可恢复。`)) return;
   try {
-    const r = await fetch(`/api/materials/${encodeURIComponent(filename)}`, { method: 'DELETE' }).then(r => r.json());
-    if (r.error) throw new Error(r.error);
-    load(); // 刷新列表
+    const deletedFiles = getDeletedFiles();
+    if (!deletedFiles.includes(filename)) { deletedFiles.push(filename); saveDeletedFiles(deletedFiles); }
+    load();
   } catch(e) { alert('删除失败: ' + e.message); }
 }
 
 // 下载
-function downloadAsset(filename) {
+function downloadAsset(filename, dataUrl = null) {
   const a = document.createElement('a');
-  a.href = './assets/' + filename;
+  a.href = dataUrl || '/assets/' + filename;
   a.download = filename;
   document.body.appendChild(a);
   a.click();
@@ -269,10 +285,13 @@ async function handleFiles(files) {
   const progressEl = document.getElementById('upload-progress');
   progressEl.style.display = 'block';
   let uploaded = 0;
+  const userUploads = getUserUploads();
 
   for (const file of files) {
     if (!file.type.startsWith('image/')) continue;
     progressEl.textContent = `上传中 ${uploaded + 1}/${files.length}: ${file.name}...`;
+
+    if (userUploads.find(u => u.file === file.name)) { uploaded++; continue; }
 
     const reader = new FileReader();
     const dataUrl = await new Promise(resolve => {
@@ -281,11 +300,8 @@ async function handleFiles(files) {
     });
 
     try {
-      const res = await fetch('/api/materials/upload', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filename: file.name, data: dataUrl, category: '用户上传' })
-      }).then(r => r.json());
-      if (res.error) throw new Error(res.error);
+      userUploads.push({ file: file.name, width: 512, height: 512, sizeKB: Math.round(file.size / 1024), dataUrl: dataUrl });
+      saveUserUploads(userUploads);
       uploaded++;
     } catch(e) {
       progressEl.textContent = `❌ ${file.name}: ${e.message}`;
@@ -294,9 +310,9 @@ async function handleFiles(files) {
     }
   }
 
-  progressEl.textContent = `✅ 成功上传 ${uploaded} 张图片`;
+  progressEl.textContent = `✅ 成功上传 ${uploaded} 张图片（保存在浏览器中）`;
   setTimeout(() => { progressEl.style.display = 'none'; }, 2000);
-  load(); // 刷新列表
+  load();
 }
 
 load();
