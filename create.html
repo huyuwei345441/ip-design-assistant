@@ -189,12 +189,27 @@ async function submit() {
 
     let html = '';
     const fields = [['创意方向','creativeDirection'],['表情','expression'],['动作','action'],['道具','prop'],['穿搭','outfit'],['背景','background']];
-    html += `<div class="section-title" style="font-size:14px;font-weight:700;margin-bottom:10px">🎨 创意方案</div><div class="result-grid">`;
-    fields.forEach(([label,key]) => { if (d[key]) html += `<div class="result-item"><div class="label">${label}</div><div class="value">${esc(d[key])}</div></div>`; });
+    // 创意方向大横幅
+    if (d.creativeDirection) {
+      html += `<div style="background:linear-gradient(135deg,#ECF5FF,#F0F7FF);border-radius:12px;padding:24px;margin-bottom:20px;border-left:4px solid var(--blue)"><div style="font-size:12px;color:var(--blue);font-weight:700;letter-spacing:1px;margin-bottom:6px">💡 创意方向</div><div style="font-size:17px;font-weight:700;color:var(--text);line-height:1.7">${esc(d.creativeDirection)}</div></div>`;
+    }
+    // 核心参数卡片
+    html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:20px">`;
+    const fields = [['表情','expression','😊'],['动作','action','✋'],['道具','prop','🎁'],['穿搭','outfit','👔'],['背景','background','🖼']];
+    fields.forEach(([label,key,icon]) => {
+      if (d[key]) html += `<div style="background:#fff;border:1px solid var(--border-light);border-radius:10px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,0.03)"><div style="font-size:11px;color:var(--text3);margin-bottom:4px">${icon} ${label}</div><div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.6">${esc(d[key])}</div></div>`;
+    });
     html += `</div>`;
-    if (d.prompts && d.prompts.length) { html += `<div class="creative-section"><h3>📝 生成 Prompt</h3><ul>`; d.prompts.forEach(p => { html += `<li style="margin:6px 0;padding:10px 14px;background:#FAFBFC;border-radius:8px;font-family:monospace;font-size:13px">${esc(p)}</li>`; }); html += `</ul></div>`; }
-    if (d.usageNote) html += `<div class="creative-section"><h3>📋 应用说明</h3><p>${esc(d.usageNote)}</p></div>`;
-    if (d.raw) html += `<div class="creative-section"><h3>📄 原始响应</h3><p style="white-space:pre-wrap;font-size:12px">${esc(d.raw)}</p></div>`;
+    // Prompts
+    if (d.prompts && d.prompts.length) {
+      html += `<div style="margin-top:16px"><div style="font-size:13px;font-weight:700;margin-bottom:10px">📝 生成 Prompt</div>`;
+      d.prompts.forEach((p,i) => {
+        html += `<div style="position:relative;background:#FAFBFC;border:1px solid var(--border-light);border-radius:10px;padding:18px 20px;margin-bottom:10px;font-family:'SF Mono',Menlo,monospace;font-size:13px;line-height:1.8;color:var(--text);word-break:break-word">${esc(p)}<button onclick="copyThis(this)" style="position:absolute;top:10px;right:10px;border:none;background:#fff;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;color:var(--text2);box-shadow:0 1px 3px rgba(0,0,0,0.08)">📋 复制</button></div>`;
+      });
+      html += `</div>`;
+    }
+    // 应用说明
+    if (d.usageNote) html += `<div style="margin-top:16px;background:#FFFCF5;border-radius:10px;padding:16px 20px;border-left:3px solid var(--warning)"><div style="font-size:12px;font-weight:700;color:var(--warning);margin-bottom:4px">📋 应用说明</div><div style="font-size:13px;color:var(--text2);line-height:1.8">${esc(d.usageNote)}</div></div>`;
 
     document.getElementById('result').innerHTML = html;
     document.getElementById('result').classList.add('show');
@@ -209,6 +224,13 @@ async function submit() {
   }
 }
 
+function copyThis(btn) {
+  const text = btn.parentElement.textContent.replace('📋 复制','').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✅ 已复制'; btn.style.background='var(--success)'; btn.style.color='#fff';
+    setTimeout(() => { btn.textContent = '📋 复制'; btn.style.background='#fff'; btn.style.color='var(--text2)'; }, 2000);
+  });
+}
 function esc(s) { const d = document.createElement('div'); d.textContent = String(s); return d.innerHTML; }
 </script>
 </body>
