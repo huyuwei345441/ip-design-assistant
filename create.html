@@ -208,17 +208,22 @@ async function submit() {
       });
       html += `</div>`;
     }
-    // 应用说明
+    // 应用说明 / 原始响应降级
     if (d.usageNote) html += `<div style="margin-top:16px;background:#FFFCF5;border-radius:10px;padding:16px 20px;border-left:3px solid var(--warning)"><div style="font-size:12px;font-weight:700;color:var(--warning);margin-bottom:4px">📋 应用说明</div><div style="font-size:13px;color:var(--text2);line-height:1.8">${esc(d.usageNote)}</div></div>`;
+    else if (d.raw) html += `<div style="margin-top:16px;background:#FAFBFC;border-radius:10px;padding:16px 20px;border:1px solid var(--border-light)"><div style="font-size:12px;font-weight:700;color:var(--text3);margin-bottom:4px">📄 创意方案原文</div><div style="font-size:13px;color:var(--text2);line-height:1.8;white-space:pre-wrap">${esc(d.raw)}</div></div>`;
+    // 没有有效内容
+    if (!html) html = '<div style="text-align:center;padding:24px;color:var(--text3)">AI 返回格式异常，请重试或更换 API Key</div>';
 
     document.getElementById('result').innerHTML = html;
     document.getElementById('result').classList.add('show');
   } catch(e) {
-    if (e.message.includes('API Key') || e.message.includes('API_KEY')) {
+    if (e.message.includes('API') || e.message.includes('Key') || e.message.includes('key')) {
       document.getElementById('setup-panel').style.display = 'block';
-      errEl.textContent = '请先配置 API Key';
+      errEl.textContent = '';
+      document.getElementById('api-key-input').focus();
+    } else {
+      errEl.textContent = e.message; errEl.style.display = 'block';
     }
-    errEl.textContent = e.message; errEl.style.display = 'block';
   } finally {
     btn.disabled = false; btn.innerHTML = '💡 生成创意方案';
   }

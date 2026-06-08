@@ -369,7 +369,11 @@ app.post("/api/create", async (req, res) => {
       2048
     );
     const m = text.match(/\{[\s\S]*\}/);
-    res.json(m ? JSON.parse(m[0]) : { raw: text });
+    if (m) {
+      try { return res.json(JSON.parse(m[0])); } catch(e) {}
+    }
+    // 降级：把纯文本当创意方向展示
+    res.json({ creativeDirection: text.replace(/\n/g,' ').substring(0,300), usageNote: "AI 返回了非结构化内容，以上为原文摘要" });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
