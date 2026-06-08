@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "福宝 IP 设计助手网站",
   "main": "server.js",
-  "scripts": { "start": "node server.js" },
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
-    "express": "^4.21.0"
+    "express": "^4.22.2"
   }
 }

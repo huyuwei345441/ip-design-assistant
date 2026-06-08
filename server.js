@@ -5,10 +5,10 @@ const fs = require("fs");
 
 const app = express();
 app.use(express.json({ limit: "50mb" }));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(__dirname));
 
-const SCRIPTS_DIR = path.join(__dirname, "..", "scripts");
-const SOURCE_DIR = path.join(__dirname, "..", "..", "..", "ip设计助手skill");
+const SCRIPTS_DIR = path.join(__dirname, "scripts");
+const SOURCE_DIR = path.join(__dirname, "docs");
 
 function runScript(scriptName, args = []) {
   return new Promise((resolve, reject) => {
