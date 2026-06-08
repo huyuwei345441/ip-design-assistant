@@ -4,9 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IP素材库 — 福宝 IP 设计助手</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
   --blue: #1477FF; --blue-light: #ECF5FF; --blue-hover: #005EE6;
@@ -14,38 +11,28 @@
   --bg: #F5F9FF; --card: #fff; --text: #05070D; --text2: #596276; --text3: #8B95A7;
   --border: #DDEBFA; --border-light: #EAF2FC;
   --success: #16C964; --success-bg: #F0FFF6; --error: #F43F3F; --error-bg: #FFF5F5;
-  --shadow: 0 1px 4px rgba(0,0,0,0.04), 0 2px 12px rgba(0,0,0,0.03);
-  --radius: 16px; --radius-sm: 10px;
-  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow: 0 1px 4px rgba(0,0,0,0.04); --radius: 16px; --radius-sm: 10px;
+  --transition: 0.2s;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:"Inter",-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--text); min-height:100vh; line-height:1.6; -webkit-font-smoothing:antialiased; }
-::-webkit-scrollbar { width:8px; } ::-webkit-scrollbar-track { background:transparent; } ::-webkit-scrollbar-thumb { background:#CDD3DE; border-radius:4px; }
-
+body { font-family:"Inter",-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--text); min-height:100vh; line-height:1.6; }
+::-webkit-scrollbar { width:8px; } ::-webkit-scrollbar-thumb { background:#CDD3DE; border-radius:4px; }
 .header { background:rgba(255,255,255,0.86); padding:0 40px; height:72px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(216,229,245,0.8); position:sticky; top:0; z-index:100; backdrop-filter:blur(14px); }
-.header-left { display:flex; align-items:center; gap:14px; } .header-left a { text-decoration:none; color:inherit; } .header-left h1 { font-size:22px; font-weight:800; }
-.back-link { font-size:14px; color:var(--text3); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color var(--transition); } .back-link:hover { color:var(--blue); }
-
+.header-left a { text-decoration:none; color:inherit; } .header-left h1 { font-size:22px; font-weight:800; }
+.back-link { font-size:14px; color:var(--text3); text-decoration:none; } .back-link:hover { color:var(--blue); }
 .tab-bar { background:#fff; border-bottom:1px solid var(--border); padding:0 40px; display:flex; gap:4px; position:sticky; top:72px; z-index:99; }
-.tab { padding:14px 22px; font-size:14px; font-weight:550; color:var(--text2); cursor:pointer; border:none; background:none; border-bottom:2.5px solid transparent; transition:all var(--transition); font-family:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
+.tab { padding:14px 22px; font-size:14px; font-weight:550; color:var(--text2); text-decoration:none; border-bottom:2.5px solid transparent; transition:all var(--transition); display:inline-flex; align-items:center; gap:6px; }
 .tab:hover { color:var(--blue); background:var(--blue-light); } .tab.active { color:var(--blue); border-bottom-color:var(--blue); font-weight:650; }
-
 .container { max-width:1040px; margin:32px auto; padding:0 28px; }
 .card { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border-light); padding:28px; margin-bottom:24px; }
-.card-header { margin-bottom:20px; } .card-header h2 { font-size:22px; font-weight:800; margin-bottom:4px; }
-.card-header .subtitle { font-size:13px; color:var(--text3); }
-
-/* Upload Zone */
-.upload-zone { border:2px dashed var(--border); border-radius:var(--radius-sm); padding:28px; text-align:center; background:#FAFBFC; transition:all var(--transition); cursor:pointer; margin-bottom:20px; }
+.card-header h2 { font-size:22px; font-weight:800; } .card-header .subtitle { font-size:13px; color:var(--text3); margin-top:4px; }
+.upload-zone { border:2px dashed var(--border); border-radius:var(--radius-sm); padding:28px; text-align:center; background:#FAFBFC; cursor:pointer; margin-bottom:20px; transition:all var(--transition); }
 .upload-zone:hover { border-color:var(--blue); background:var(--blue-light); }
-.upload-zone.drag-over { border-color:var(--blue); background:var(--blue-light); box-shadow:0 0 0 3px rgba(20,119,255,0.08); }
+.upload-zone.drag-over { border-color:var(--blue); background:var(--blue-light); }
 .upload-zone .upload-icon { font-size:32px; margin-bottom:8px; }
-.upload-zone p { font-size:13px; color:var(--text2); }
-.upload-zone .hint { font-size:11px; color:var(--text3); margin-top:4px; }
+.upload-zone p { font-size:13px; color:var(--text2); } .upload-zone .hint { font-size:11px; color:var(--text3); margin-top:4px; }
 .upload-zone input[type=file] { display:none; }
 .upload-progress { display:none; text-align:center; padding:8px; font-size:13px; color:var(--blue); }
-
-/* Asset Grid */
 .asset-count { font-size:13px; color:var(--text3); margin-bottom:14px; }
 .asset-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:14px; }
 .asset-card { position:relative; border:1px solid var(--border-light); border-radius:var(--radius-sm); overflow:hidden; background:#fff; transition:all var(--transition); }
@@ -54,14 +41,12 @@ body { font-family:"Inter",-apple-system,BlinkMacSystemFont,"PingFang SC","Micro
 .asset-card .img-wrap { aspect-ratio:1; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#FAFBFC; }
 .asset-card .img-wrap img { max-width:100%; max-height:100%; object-fit:contain; }
 .asset-card .card-actions { position:absolute; top:6px; right:6px; display:flex; gap:4px; opacity:0; transition:opacity var(--transition); }
-.asset-card .card-actions button { width:32px; height:32px; border:none; border-radius:6px; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.92); box-shadow:0 2px 8px rgba(0,0,0,0.12); transition:all var(--transition); }
+.asset-card .card-actions button { width:32px; height:32px; border:none; border-radius:6px; font-size:14px; cursor:pointer; background:rgba(255,255,255,0.92); box-shadow:0 2px 8px rgba(0,0,0,0.12); transition:all var(--transition); }
 .asset-card .card-actions button:hover { background:var(--blue); color:#fff; }
-.asset-card .info { padding:10px 12px; }
-.asset-card .info .fname { font-size:11px; color:var(--text2); word-break:break-all; line-height:1.4; }
+.asset-card .info { padding:10px 12px; } .asset-card .info .fname { font-size:11px; color:var(--text2); word-break:break-all; }
 .asset-card .info .meta { font-size:10px; color:var(--text3); margin-top:2px; }
 .loading { text-align:center; padding:48px; color:var(--text3); grid-column:1/-1; }
 .footer { text-align:center; padding:28px; color:var(--text3); font-size:13px; border-top:1px solid var(--border-light); margin-top:48px; }
-
 @media(max-width:640px) {
   .header { padding:0 20px; } .tab-bar { padding:0 20px; overflow-x:auto; }
   .tab { padding:12px 14px; font-size:12px; white-space:nowrap; }
@@ -72,12 +57,10 @@ body { font-family:"Inter",-apple-system,BlinkMacSystemFont,"PingFang SC","Micro
 </style>
 </head>
 <body>
-
 <header class="header">
   <div class="header-left"><a href="./index.html"><h1>福宝 IP 设计助手</h1></a></div>
   <a href="./index.html" class="back-link">← 返回首页</a>
 </header>
-
 <nav class="tab-bar">
   <a class="tab" href="./advise.html">🎯 规范顾问</a>
   <a class="tab" href="./prompt.html">✨ 提示词生成</a>
@@ -85,15 +68,12 @@ body { font-family:"Inter",-apple-system,BlinkMacSystemFont,"PingFang SC","Micro
   <a class="tab active" href="./assets.html">🖼️ 素材库</a>
   <a class="tab" href="./handbook.html">📖 IP规范手册</a>
 </nav>
-
 <div class="container">
   <div class="card">
     <div class="card-header">
       <h2>IP 素材库</h2>
       <p class="subtitle">福宝 IP 形象素材，支持上传和下载</p>
     </div>
-
-    <!-- 上传区域 -->
     <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
       <div class="upload-icon">📤</div>
       <p>点击上传或拖拽图片到这里</p>
@@ -101,217 +81,90 @@ body { font-family:"Inter",-apple-system,BlinkMacSystemFont,"PingFang SC","Micro
       <input type="file" id="file-input" accept="image/png,image/jpeg,image/gif,image/webp" multiple onchange="handleFiles(this.files)">
     </div>
     <div class="upload-progress" id="upload-progress"></div>
-
-    <!-- 素材数量 -->
     <div class="asset-count" id="asset-count"></div>
-
-    <!-- 素材网格 -->
-    <div class="asset-grid" id="asset-grid">
-      <div class="loading">加载中...</div>
-    </div>
+    <div class="asset-grid" id="asset-grid"><div class="loading">加载中...</div></div>
   </div>
 </div>
-
 <div class="footer">58数科 福宝IP设计助手</div>
-
 <script>
 let allData = [];
-
-// localStorage helpers for static deployment
-function getUserUploads() { try { const s = localStorage.getItem('userAssets'); return s ? JSON.parse(s) : []; } catch(e) { return []; } }
-function saveUserUploads(files) { localStorage.setItem('userAssets', JSON.stringify(files)); }
-function getDeletedFiles() { try { const s = localStorage.getItem('deletedAssets'); return s ? JSON.parse(s) : []; } catch(e) { return []; } }
-function saveDeletedFiles(files) { localStorage.setItem('deletedAssets', JSON.stringify(files)); }
-
-// Mock data for static deployment - all actual assets
-const mockAssets = [
-  { name: 'IP基础形象', files: [
-    { file: 'fubao-hero-designer.png', width: 512, height: 512, sizeKB: 128 },
-    { file: 'fubao-hero-closeup.png', width: 512, height: 512, sizeKB: 96 },
-    { file: '203752305-298d7ab63f3c0cad8e843825e5fb78671e5481b9f4b4e09502f4552b705a1f52.png', width: 512, height: 512, sizeKB: 256 },
-    { file: '203754237-557b0f27cc1ef8763369ad17fa8e898bb2a99c3964b0821893db26ddce4c0274.png', width: 512, height: 512, sizeKB: 234 },
-    { file: '203789861-8ff93077f85d63247e4c8ca31bac85c18b083e45936d1c9376083b382c185eb0.png', width: 512, height: 512, sizeKB: 198 },
-    { file: '210239371-9a493e1d348433b79ca374a9e1ebf2c72f22a12e10ce9706b4153e083a08d7f3.png', width: 512, height: 512, sizeKB: 287 },
-    { file: '211700437-6899d67fb72faadcc73894ad20117b1aaafbe312c19c9b86ba02ab0a0120a806 (1).png', width: 512, height: 512, sizeKB: 312 },
-    { file: '212296814-b19cd3ebffdde213807bbe08ee72a6a7c8f0126efea9ed45052d825adbeaa09b.png', width: 512, height: 512, sizeKB: 265 },
-    { file: '212969237-1d0bcd95a14771a3dfecbd19b701b42db66185cf043c3469db9dd133a5545055.png', width: 512, height: 512, sizeKB: 245 },
-    { file: '214590432-1bf999fcfccdc2632dd78c15dc2f1112b764d339f44bdfa0a2b26d139412859a.png', width: 512, height: 512, sizeKB: 278 },
-    { file: '214590433-db079cc8d6b32c81b0bdded87fbabfc7cb65b1399ef93ea0bc93077eb1f5c183.png', width: 512, height: 512, sizeKB: 262 },
-    { file: '214596837-3f86923509d89491d9488b46394478423d1da316eba7f17830887c8c1c18c8f3.png', width: 512, height: 512, sizeKB: 289 },
-    { file: '214596839-34230e85dc892bcefc5b08b363f0c86423553fcf98b8d6c92b37175bcb1d6f1b.png', width: 512, height: 512, sizeKB: 273 },
-    { file: '214596841-9e27ccaa02630fc95d5db3d1e7a9f69aded8c8a30964b23912c40e57ba587341.png', width: 512, height: 512, sizeKB: 295 },
-    { file: '214596843-fffce5b9590fcc1b95a5b497ddfcf07af00232351fe8d52e78a0aaef67316466.png', width: 512, height: 512, sizeKB: 268 },
-    { file: '219647279-31b7f534a816de8bd98f31128f9a6a26e05bbfc2c4ad5c64c80c2c66ff3b33ba.png', width: 512, height: 512, sizeKB: 256 },
-    { file: '219647281-22e9b040647533779b1bdc16eb01a00cf77c1f60e88b53f53e60b6d3a88c0319.png', width: 512, height: 512, sizeKB: 281 },
-    { file: '219647282-59ef15966ec33055ead1ab6a52d1961b65a98c919ba8523941023a0f0225625d.png', width: 512, height: 512, sizeKB: 243 },
-  ], count: 18 },
-  { name: '节日主题', files: [
-    { file: '038e651663fd6a5a2536f510d6e029a347d75b93952427d0e6492c6626fccb29.png', width: 512, height: 512, sizeKB: 224 },
-    { file: '06351650e2f8c225b9beed7beed321852b421dc4d24fcb60288f31ebec4a8854.png', width: 512, height: 512, sizeKB: 218 },
-    { file: '0760cc3538c167cc4bac245c62bc115f7be970d680aa2774c407ef60abed9109.png', width: 512, height: 512, sizeKB: 236 },
-    { file: '08d6a9fd7a6c161a389fd0a077c9615338f89cef16e813879c5ace10d9a0bf24.png', width: 512, height: 512, sizeKB: 242 },
-    { file: '1f4efa7cb8f2e70baf0d5e865564e2e3654ca8334216d2db1f66ce18ce175545.png', width: 512, height: 512, sizeKB: 256 },
-    { file: '2579176621290a6f4ca0698c32eb5d5e39319fe5684b80b935b835b13b0e26c9.png', width: 512, height: 512, sizeKB: 278 },
-    { file: '262785654-9787eab0970f1f8d51d37387912f1cbd31684ad4ef78476a5a32eba69a1fefe0.png', width: 512, height: 512, sizeKB: 265 },
-    { file: '268543829-0cd10918b65a996de8982deffbba49dc5d8783a3d531d2ccbf373bc4e94e9002.png', width: 512, height: 512, sizeKB: 289 },
-  ], count: 8 },
-  { name: '场景插画', files: [
-    { file: 'KuaPai_AI_20260603170845.jpeg', width: 1024, height: 768, sizeKB: 456 },
-    { file: 'KuaPai_AI_20260603171614.jpeg', width: 1024, height: 768, sizeKB: 512 },
-    { file: 'KuaPai_AI_20260603171947.jpeg', width: 1024, height: 768, sizeKB: 489 },
-    { file: 'KuaPai_AI_20260603172135.jpeg', width: 1024, height: 768, sizeKB: 476 },
-    { file: 'KuaPai_AI_20260603172447.jpeg', width: 1024, height: 768, sizeKB: 503 },
-    { file: 'KuaPai_AI_20260226155150.png', width: 512, height: 512, sizeKB: 224 },
-    { file: 'KuaPai_AI_20260317144437.png', width: 512, height: 512, sizeKB: 238 },
-    { file: 'KuaPai_AI_20260519112509.png', width: 512, height: 512, sizeKB: 251 },
-  ], count: 8 },
-  { name: '其他素材', files: [
-    { file: '2b5625defc05d9e83a42f9306442585d17647fe5fcfe66f71c3c68d727e1c8b8.png', width: 512, height: 512, sizeKB: 198 },
-    { file: '370a399628e351b9dd0f1eee08dad86d97bb57897fd995e884e1397d71aeba46.png', width: 512, height: 512, sizeKB: 212 },
-    { file: '3c343901b4ffa4dd2cbaba063c4400b384b38a70c3538a4ce712d0fc97a5bb1b.png', width: 512, height: 512, sizeKB: 226 },
-    { file: '42542.png', width: 512, height: 512, sizeKB: 186 },
-    { file: '43256.png', width: 512, height: 512, sizeKB: 194 },
-    { file: '523534.png', width: 512, height: 512, sizeKB: 201 },
-    { file: '53445.png', width: 512, height: 512, sizeKB: 189 },
-    { file: '534534.png', width: 512, height: 512, sizeKB: 197 },
-    { file: '55a4ed9b4e07c61dcb6ef7bb3842e790fb71f791ed70c899998100e5b338cdd0.png', width: 512, height: 512, sizeKB: 215 },
-    { file: '5dab5b2021e82c1b0fdd0c4ff50c4a7f715893986130a076273d9d3a41d36454.png', width: 512, height: 512, sizeKB: 223 },
-    { file: '5f92d9fe962c25cc6c9d6e2bced03fa670110012e4de6ed3106353467d2bf576.png', width: 512, height: 512, sizeKB: 234 },
-    { file: '634535.png', width: 512, height: 512, sizeKB: 192 },
-    { file: '6899d67fb72faadcc73894ad20117b1aaafbe312c19c9b86ba02ab0a0120a806.png', width: 512, height: 512, sizeKB: 246 },
-    { file: '7261b75cd95becc48c3c78b7295bcea83325d4a82f76838dd6e0009ced609fd4.png', width: 512, height: 512, sizeKB: 218 },
-    { file: '866eddc5c597e11e34d69e16727b0d2e969541bf7106c239540beb01063b8397.png', width: 512, height: 512, sizeKB: 229 },
-    { file: '866eddc5c597e11e34d69e16727b0d2e969541bf7106c239540beb01063b8397 (1).png', width: 512, height: 512, sizeKB: 234 },
-    { file: '878c30f2ab481e62e94d560f032dc3461bc7413cb9451b13bdeaf1afd01984ce.png', width: 512, height: 512, sizeKB: 241 },
-    { file: '9476f18571fbe890cb2a666f2f823261261d7ced1a36d8a38513f6afa5b5ac8f.png', width: 512, height: 512, sizeKB: 216 },
-    { file: 'a2f21e78f2c160f51d98389f5c4530160d028d1d37c6db6532f2d226bf747915.png', width: 512, height: 512, sizeKB: 228 },
-    { file: 'aba2b801dd216f8721c25b77d5aaeb4bedbec2862991928ad850d34cbd2eda21.png', width: 512, height: 512, sizeKB: 239 },
-    { file: 'b9723d93d54abbd7932f89500d7d6dcaee14965b26ac84f0108d4e347a7ba5b2.png', width: 512, height: 512, sizeKB: 245 },
-    { file: 'baf612078e669ff1d07eaea243e028a9d1f2a3d63f2892e7efd07e89d92546c5.png', width: 512, height: 512, sizeKB: 251 },
-    { file: 'c604ed3a4219bf12fc271c8d1b564985661911382380ac852c2d55585368d7b1.png', width: 512, height: 512, sizeKB: 222 },
-    { file: 'c7f37ff5891eb55d8c804246030a8721aa14cf48914c27b03757fa5ed96bbd5f.png', width: 512, height: 512, sizeKB: 233 },
-    { file: 'e00f8ab74607a15c659fabf6a6d32c525fe8b7995fc01b3e799add7801219f6e.png', width: 512, height: 512, sizeKB: 248 },
-    { file: 'e4cb17a692ab76ca29e53f41b8d64aefb1054526053a3f5dc995c06dd347524b.png', width: 512, height: 512, sizeKB: 256 },
-    { file: 'f017c0da6c6c3859c5c295dce974680d004189df21c5a8a9af74cdbdbe2d5637.png', width: 512, height: 512, sizeKB: 262 },
-    { file: 'f41e8b9b89f3cb68993f016931d74f14e48868fdcb12866b5773628139421919.png', width: 512, height: 512, sizeKB: 271 },
-    { file: 'f96d4fb9878fa91468ea8cc52aab0028258f7daa21ea3f9bf74fd68471959ee4.png', width: 512, height: 512, sizeKB: 278 },
-    { file: 'image (10).png', width: 512, height: 512, sizeKB: 186 },
-    { file: 'image (11).png', width: 512, height: 512, sizeKB: 193 },
-    { file: 'output (36).png', width: 512, height: 512, sizeKB: 207 },
-    { file: 'output (8)_副本.png', width: 512, height: 512, sizeKB: 214 },
-    { file: 'zxzxx.png', width: 512, height: 512, sizeKB: 198 },
-    { file: '画板备份 41.png', width: 512, height: 512, sizeKB: 221 },
-    { file: '组 2.png', width: 512, height: 512, sizeKB: 203 },
-  ], count: 35 },
-];
 
 async function load() {
   try {
     const d = await fetch('/api/materials').then(r => r.json());
-    allData = d.groups || JSON.parse(JSON.stringify(mockAssets));
+    if (d.error) throw new Error(d.error);
+    allData = d.groups || [];
+    render(allData);
+    let total = 0; allData.forEach(g => total += g.count);
+    document.getElementById('asset-count').textContent = '共 ' + total + ' 个素材';
   } catch(e) {
-    allData = JSON.parse(JSON.stringify(mockAssets));
+    document.getElementById('asset-grid').innerHTML = '<div class="loading">加载失败: ' + e.message + '</div>';
   }
-  
-  // Apply user uploads from localStorage
-  const userUploads = getUserUploads();
-  if (userUploads.length) {
-    let userGroup = allData.find(g => g.name === '用户上传');
-    if (!userGroup) { userGroup = { name: '用户上传', files: [], count: 0 }; allData.push(userGroup); }
-    userUploads.forEach(u => { if (!userGroup.files.find(f => f.file === u.file)) { userGroup.files.push(u); userGroup.count++; } });
-  }
-  
-  // Apply deleted files filter
-  const deletedFiles = getDeletedFiles();
-  allData.forEach(g => { g.files = g.files.filter(f => !deletedFiles.includes(f.file)); g.count = g.files.length; });
-  allData = allData.filter(g => g.files.length > 0);
-  
-  render(allData);
-  const total = allData.reduce((sum, g) => sum + g.count, 0);
-  document.getElementById('asset-count').textContent = `共 ${total} 个素材`;
 }
 
 function render(groups) {
-  const grid = document.getElementById('asset-grid');
-  if (!groups.length) { grid.innerHTML = '<div class="loading">暂无素材，上传第一张吧 👆</div>'; return; }
-  let html = '';
-  groups.forEach(g => {
-    g.files.forEach(f => {
-      const src = f.dataUrl ? f.dataUrl : '/assets/' + f.file;
-      html += `<div class="asset-card">
-        <div class="img-wrap"><img src="${src}" alt="${f.file}" loading="lazy" onerror="this.parentElement.innerHTML='📷'"></div>
-        <div class="card-actions">
-          <button title="下载" onclick="downloadAsset('${f.file}', ${f.dataUrl ? "'" + f.dataUrl + "'" : 'null'})">⬇</button>
-          <button title="删除" onclick="deleteAsset('${f.file}')">🗑</button>
-        </div>
-        <div class="info">
-          <div class="fname">${f.file}</div>
-          <div class="meta">${f.width}×${f.height} · ${f.sizeKB}KB</div>
-        </div>
-      </div>`;
+  var grid = document.getElementById('asset-grid');
+  if (!groups.length) { grid.innerHTML = '<div class="loading">暂无素材</div>'; return; }
+  var html = '';
+  groups.forEach(function(g) {
+    g.files.forEach(function(f) {
+      html += '<div class="asset-card"><div class="img-wrap"><img src="./assets/' + f.file + '" alt="' + f.file + '" loading="lazy" onerror="this.parentElement.innerHTML=\'📷\'"></div><div class="card-actions"><button title="下载" onclick="event.stopPropagation();downloadAsset(\'' + f.file + '\')">⬇</button><button title="删除" onclick="event.stopPropagation();deleteAsset(\'' + f.file + '\')">🗑</button></div><div class="info"><div class="fname">' + f.file + '</div><div class="meta">' + f.width + 'x' + f.height + ' · ' + f.sizeKB + 'KB</div></div></div>';
     });
   });
   grid.innerHTML = html;
 }
 
-// 删除
-async function deleteAsset(filename) {
-  if (!confirm(`确定删除 ${filename}？此操作不可恢复。`)) return;
-  try {
-    const deletedFiles = getDeletedFiles();
-    if (!deletedFiles.includes(filename)) { deletedFiles.push(filename); saveDeletedFiles(deletedFiles); }
-    load();
-  } catch(e) { alert('删除失败: ' + e.message); }
-}
-
-// 下载
-function downloadAsset(filename, dataUrl = null) {
-  const a = document.createElement('a');
-  a.href = dataUrl || '/assets/' + filename;
+function downloadAsset(filename) {
+  var a = document.createElement('a');
+  a.href = './assets/' + filename;
   a.download = filename;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
 }
 
-// 拖拽上传
-const zone = document.getElementById('upload-zone');
-zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
-zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
-zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); handleFiles(e.dataTransfer.files); });
+async function deleteAsset(filename) {
+  if (!confirm('确定删除 ' + filename + '？')) return;
+  try {
+    var r = await fetch('/api/materials/' + encodeURIComponent(filename), { method: 'DELETE' }).then(function(r){ return r.json(); });
+    if (r.error) throw new Error(r.error);
+    load();
+  } catch(e) { alert('删除失败: ' + e.message); }
+}
 
-// 处理上传
+var zone = document.getElementById('upload-zone');
+zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('drag-over'); });
+zone.addEventListener('dragleave', function() { zone.classList.remove('drag-over'); });
+zone.addEventListener('drop', function(e) { e.preventDefault(); zone.classList.remove('drag-over'); handleFiles(e.dataTransfer.files); });
+
 async function handleFiles(files) {
-  const progressEl = document.getElementById('upload-progress');
+  var progressEl = document.getElementById('upload-progress');
   progressEl.style.display = 'block';
-  let uploaded = 0;
-  const userUploads = getUserUploads();
-
-  for (const file of files) {
+  var uploaded = 0;
+  for (var i = 0; i < files.length; i++) {
+    var file = files[i];
     if (!file.type.startsWith('image/')) continue;
-    progressEl.textContent = `上传中 ${uploaded + 1}/${files.length}: ${file.name}...`;
-
-    if (userUploads.find(u => u.file === file.name)) { uploaded++; continue; }
-
-    const reader = new FileReader();
-    const dataUrl = await new Promise(resolve => {
-      reader.onload = e => resolve(e.target.result);
+    progressEl.textContent = '上传中 ' + (uploaded + 1) + '/' + files.length + ': ' + file.name + '...';
+    var dataUrl = await new Promise(function(resolve) {
+      var reader = new FileReader();
+      reader.onload = function(e) { resolve(e.target.result); };
       reader.readAsDataURL(file);
     });
-
     try {
-      userUploads.push({ file: file.name, width: 512, height: 512, sizeKB: Math.round(file.size / 1024), dataUrl: dataUrl });
-      saveUserUploads(userUploads);
+      var res = await fetch('/api/materials/upload', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename: file.name, data: dataUrl, category: '用户上传' })
+      }).then(function(r) { return r.json(); });
+      if (res.error) throw new Error(res.error);
       uploaded++;
     } catch(e) {
-      progressEl.textContent = `❌ ${file.name}: ${e.message}`;
-      setTimeout(() => { progressEl.style.display = 'none'; }, 2000);
+      progressEl.textContent = '❌ ' + file.name + ': ' + e.message;
+      setTimeout(function() { progressEl.style.display = 'none'; }, 3000);
       return;
     }
   }
-
-  progressEl.textContent = `✅ 成功上传 ${uploaded} 张图片（保存在浏览器中）`;
-  setTimeout(() => { progressEl.style.display = 'none'; }, 2000);
+  progressEl.textContent = '✅ 成功上传 ' + uploaded + ' 张图片';
+  setTimeout(function() { progressEl.style.display = 'none'; }, 2000);
   load();
 }
 
