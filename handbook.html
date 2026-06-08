@@ -31,7 +31,7 @@ body {
 }
 ::-webkit-scrollbar { width:8px; } ::-webkit-scrollbar-track { background:transparent; } ::-webkit-scrollbar-thumb { background:#CDD3DE; border-radius:4px; }
 
-/* ── Header ── */
+/* Header */
 .header {
   background: rgba(255,255,255,0.86); color: var(--text); padding: 0 40px; height: 72px;
   display: flex; align-items: center; justify-content: space-between;
@@ -55,7 +55,7 @@ body {
   transform: translateY(-1px);
 }
 
-/* ── Tab Bar ── */
+/* Tab Bar */
 .tab-bar { 
   background: #fff; 
   border-bottom: 1px solid var(--border); 
@@ -74,10 +74,10 @@ body {
 .tab:hover { color:var(--blue); background:var(--blue-light); }
 .tab.active { color:var(--blue); border-bottom-color:var(--blue); font-weight:650; background:#fff; }
 
-/* ── Container ── */
+/* Container */
 .container { max-width:1200px; margin:32px auto; padding:0 40px; }
 
-/* ── Card ── */
+/* Card */
 .card { 
   background:var(--card); 
   border-radius:var(--radius); 
@@ -88,10 +88,10 @@ body {
 }
 .card:hover { box-shadow: var(--shadow-hover); }
 
-/* ── Handbook Layout ── */
+/* Handbook Layout */
 .handbook-layout { display:flex; min-height:calc(100vh - 200px); }
 
-/* ── Sidebar ── */
+/* Sidebar */
 .handbook-sidebar { 
   width:250px; flex-shrink:0; 
   border-right:1px solid var(--border-light); 
@@ -118,7 +118,7 @@ body {
   border-left-color:var(--blue); font-weight:650; 
 }
 
-/* ── Content ── */
+/* Content */
 .handbook-content { 
   flex:1; padding:32px 40px; 
   overflow-y:auto; max-height:calc(100vh - 200px);
@@ -186,7 +186,7 @@ body {
   color:var(--text3); font-size:15px;
 }
 
-/* ── Footer ── */
+/* Footer */
 .footer { 
   text-align:center; padding:32px; 
   color:var(--text3); font-size:13px; 
@@ -194,7 +194,7 @@ body {
   margin-top:48px;
 }
 
-/* ── Responsive ── */
+/* Responsive */
 @media(max-width:640px) {
   .header { padding:0 20px; } 
   .tab-bar { padding:0 20px; overflow-x:auto; }
@@ -228,7 +228,7 @@ body {
 
 <nav class="tab-bar">
   <a class="tab" href="./advise.html">🎯 规范顾问</a>
-  <a class="tab" href="./prompt.html">✨ 提示词生成</a>
+  <a class="tab" href="./prompt.html">✨ AI生图提示词</a>
   <a class="tab" href="./create.html">💡 创意工坊</a>
   <a class="tab" href="./assets.html">🖼️ 素材库</a>
   <a class="tab active" href="./handbook.html">📖 IP规范手册</a>
@@ -238,9 +238,13 @@ body {
   <div class="card">
     <div class="handbook-layout">
       <div class="handbook-sidebar" id="sidebar">
-        <div class="cat-title">IP品牌规范</div>
+        <div class="cat-title">品牌基础规范</div>
         <div id="sidebar-brand"></div>
-        <div class="cat-title" style="margin-top:16px">UI线上规范</div>
+        <div class="cat-title" style="margin-top:16px">IP人设文档</div>
+        <div id="sidebar-ip"></div>
+        <div class="cat-title" style="margin-top:16px">IP应用规范</div>
+        <div id="sidebar-app"></div>
+        <div class="cat-title" style="margin-top:16px">UI场景规范</div>
         <div id="sidebar-ui"></div>
       </div>
       <div class="handbook-content" id="content">
@@ -253,20 +257,15 @@ body {
 <div class="footer">58数科 福宝IP设计助手</div>
 
 <script>
-let handbookData = null;
-
-// Mock data for static deployment
-const mockHandbookData = {
+const handbookData = {
   brand: [
     {
       title: '品牌背景',
       content: `## 概述
 
-58数科是58集团旗下子公司，经营业务包括个人消费信贷及小微全业贷款，车金融、保险、金科等与数字金融科技相关的业务。
+58数科是58集团旗下子公司，经营业务包括个人消费信贷及小微企业贷款，车金融、保险、金科等与数字金融科技相关的业务。
 
-其中个人消费贷款产品包括自管自运营产品（58好借）和平分产品（58快借）两个品类，小微企业贷款产品包括小微企业贷款及保理服务两个品类。
-
-58数科产品生态内的**"新市民"**指所有拥有消费信贷服务需求，但征信记录空白或较薄的客群。
+其中个人消费贷款产品包括自营产品（58好借）和平台产品（58快借）两个品类，小微企业贷款产品包括小微企业贷及保理服务两个品类。
 
 旨在为58同城生态内的**"新市民"**提供及时安全的信贷服务。
 
@@ -280,375 +279,337 @@ APP
 
 ## 用户画像
 
-目标用户主要是年龄在20-45岁之间的城市新市民群体，包括：
-- 刚毕业的大学生
-- 进城务工人员
-- 小微企业主
-- 自由职业者
-
-## 设计原则
-
-1. **亲和力**：使用温暖友好的视觉风格
-2. **专业感**：传递专业可信赖的品牌形象
-3. **一致性**：保持与58集团整体风格的统一
-4. **创新性**：在传统金融品牌中脱颖而出`
-    },
-    {
-      title: '品牌理念',
-      content: `## 品牌定位
-
-福宝作为58数科的IP形象，承载着连接用户与金融服务的重要使命。
-
-## 核心价值
-
-- **信任**：成为用户信赖的金融伙伴
-- **温暖**：用亲和力打破金融的冰冷感
-- **专业**：提供专业可靠的服务
-- **创新**：持续创新服务体验
-
-## 设计目标
-
-1. 建立品牌辨识度
-2. 增强用户信任感
-3. 提升品牌亲和力
-4. 传递温暖专业的形象`
+目标用户主要是年龄在20-45岁之间的城市新市民群体，包括刚毕业的大学生、进城务工人员、小微企业主和自由职业者。`
     },
     {
       title: '设计理念',
-      content: `## 设计风格
+      content: `## 设计理念
 
-福宝的设计风格以简洁、现代、亲和力为核心：
+金融产品和社交、电商完全不同，**设计理念不是纯美学偏好，而是「 安全 + 用户 + 业务 + 信任」的综合决策**。
 
-### 视觉风格
-- 圆润可爱的造型
-- 温暖明亮的配色
-- 简洁干净的线条
+#### 信任为本 · 可靠
 
-### 性格特征
-- 活泼开朗
-- 专业可靠
-- 友好亲切
-- 充满活力
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/6d683731fafd4c92af0a0094f90a64f9.png)
 
-## 使用规范
+金融的第一需求是信任，设计所有表达都服务于「可信、专业、可靠」。
 
-### 色彩规范
-- 主色调：蓝色系 (#1477FF)
-- 辅助色：橙色系 (#FF6B3D)
-- 中性色：灰色系
+#### **安全感知 · 隐私**
 
-### 字体规范
-- 标题：Inter Bold 或 PingFang SC Bold
-- 正文：Inter Regular 或 PingFang SC Regular`
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/489ad85164fc4273861296383fcce9f5.png)
+
+金融涉及到用户的财务和个人信息，安全和隐私成为设计中至关重要的考虑因素。需要保证数据的完整性及易读性，给用户提供可信赖的安全体验。
+
+#### **规范严谨 · 合规**
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/dbd0cf23702a4a8c8b76d1af23f050f5.png)
+
+金融领域受到严格的法规和合规要求的约束，设计师必须熟悉并遵守这些规定。这可能包括用户认证流程、反洗钱和反欺诈措施等。需要在满足法规要求的同时，保证友好的体验。
+
+#### **用户理解 · 易用**
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/5f8917eb11ea44e596dc3f3b93df9891.png)
+
+金融是一个充满风险和不确定性的领域，用户对于金融机构的信任至关重要。需要向用户提供清晰的信息，使用户能够理解产品和服务的工作方式，并感到安全和信任。
+
+#### **科技轻奢 · 感官**
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/657b56e1b1af4bee85c9d3b7c725c66c.png)
+
+传统金融厚重刻板，现代金融追求轻盈、高级感、数字化。
+
+#### **平台体验 · 一致**
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/3ebe0d85dc404971bc4789c41da517e5.png)
+
+需要考虑多个平台和设备，包括网页、移动应用和其他数字渠道的适配。确保在不同平台上提供一致的用户体验，使用户无论使用何种设备都能够快速的管理金融事务。`
     },
     {
       title: '色彩系统',
-      content: `## 主色调
+      content: `![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/f1b2e6b3643443da980ffc95692eb983.png)
 
-**品牌蓝** - #1477FF
-- 用于主按钮、链接、重要强调
+在色彩体系中，根据对色彩的解读、元素的使用场景，再结合用户画像来定义系统色板、多彩色板。迎合用户的审美习惯并保证色彩在使用场景和寓意的一致性，有利于用户在不同界面中都能准确地作出判断和选择。
 
-**品牌橙** - #FF6B3D  
-- 用于辅助按钮、警告提示
+每个颜色都定义了业务情感元素属性，便于功能区分及色彩资源管理。
 
-## 辅助色
+---
 
-**成功绿** - #16C964
-- 用于成功状态、完成提示
+## 颜色推导
 
-**警告黄** - #F5A623
-- 用于警告提示、注意事项
+作为一个互联网产品来说，多元化的色彩系统是必不可缺的。根据最新的品牌色，我们延展了相近色、互补色为辅的色彩体系，再结合基础色黑白灰来完善我们的色彩系统。使产品具备多元化属性，并为用户带来丰富的视觉感官体验。
 
-**错误红** - #F43F3F
-- 用于错误状态、删除操作
+**HSB颜色推导**
 
-## 中性色
+当下两种颜色推导方法，分别是Material Rgb进行明暗变化以及HSB的饱和度亮度明度方法。在对比后发现Material Rgb调色方法的相关颜色会出现色相偏差，而HSB调色方法相对感官来说更精准，因此决定使用HSB方法进行颜色推导。
 
-**主文字** - #05070D
-- 用于标题、重要文本
+根据色环推导方法
 
-**次要文字** - #596276
-- 用于正文、说明文字
+色相差值 15° 以内的颜色为邻近色;
 
-**辅助文字** - #8B95A7
-- 用于提示文字、占位符
+色相差值 30° 以内的颜色为类似色;
 
-**边框** - #DDEBFA
-- 用于卡片边框、分隔线
+色相差值 180° 的颜色为互补色。
 
-**背景** - #F5F9FF
-- 用于页面背景`
-    },
+最终再在进行了同色系删减及感官明度校准后得出色板。
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/6da1381aadf04e4e9c1220d93705b9cb.png)
+
+## 品牌主色
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/d50fcaa99b33406e9612b0a2fbff30db.png)
+
+| 品牌色 | 应用业务线 | 信息传递 |
+| :--- | :--- | :--- |
+| 信任蓝#0058FF | 主要用于消金品牌色 | 定义品牌信任基因，彰显专业与可靠。作为58金融消金的主品牌色，主导消费金融业务线的视觉呈现。 |
+| 心意橙#FF4614 | 主要用于乐业贷品牌色 | 承袭58同城主品牌色，以活力与温暖传递可靠感。借助平台背书强化用户信任，应用于"乐业贷"业务，体现其服务承诺； |
+
+## **辅助色**
+
+#### 通用辅助色
+
+辅助性颜色应该以主色为基准进行搭配。可以保证整体色调的协调统一、重点突出，使界面更美观。我们建议使用6：3：1原则进行UI配色。在60%的空间使用主色，30%的空间使用辅助色，最后剩下10%的空间为另外一种色彩。
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/ab01206dca0a42769950bd19ed8c5e83.png)
+
+#### **金融会员专属色**
+
+为满足金融业务中会员体系与专属权益的视觉表达需求，设计金融会员卡专属色，旨在传递尊贵、信赖与专属感，主要用于会员身份标识及相关权益类产品的核心视觉塑造。
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/f5db6d7b4fa1449fb9e203fbf99de249.png)
+
+| 色值 | 角色 | 描述 |
+| :--- | :--- | :--- |
+| #5E2D0B | 会员卡主色 / 核心标识色 | 深沉、稳重的红褐色，灵感源于经典奢华的质感，易于激发用户的尊贵感与信任感。 |
+| #FFD89B | 会员卡辅助色 / 高亮强调色 | 暖、柔和的香槟金色，具有精致的金属质感，能有效提升设计的奢华感与层次感。 |
+
+## 渐变色
+
+色彩系统在设计应用中可以产生出千变万化的渐变配色方案。不同的渐变配色会产生不同的视觉感受，为了给用户呈现更为柔和、舒适、自然的视觉效果，我们对产品中渐变配色方式做了相应规定。
+
+#### 单色渐变
+
+是在相同色相下的不同亮度之间的渐变配色方法。
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/4b36982852ad4f5f85bf3292fe794d89.png)
+
+#### 相邻色相饱和度渐变
+
+与同色相明度渐变相比，更推荐使用相邻色相明度渐变。现实世界中，颜色会受到光源颜色的影响而产生此类渐变效果，视觉上更具亲和性。
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/d436c0711f6143a7adb8ddc00e2e5130.png)
+
+## 语义色
+
+在用户习惯长期培养之下，用户对某些颜色产生特定的状态联想，设计师不要轻易打破这种用户习惯。在提示场景中，需要根据提示类型选择相应语义色，包含：成功，警示，错误，失败，文字链。
+
+| 图例 | 命名 | HEX | HSB | 应用场景 |
+| :--- | :--- | :--- | :--- | :--- |
+| ![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/c468770e4ffc46b19666cd450d57bb78.png) | green_4 | #09D57E | 154,96,84 | 成功类提示 |
+| ![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/b31bb13baecc4553ad48d0a0812e005f.png) | yellow_6 | #FFBE3D | 40,76,100 | 警示/警告类提示 |
+| ![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/77a02aa9df86417d8a8dfe4d47caf9c4.png) | red_6 | #FF3D3D | 0,76,100 | 错误/失败类提示 |
+| ![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/17efd0964b82417fab90c434deedaac1.png) | blue_d_6 | #0058FF | 219,100,100 | 提示类/文字链 |
+
+## **中性色**
+
+在中性色设定上，我们定义文字和背景两套体系。提升页面的整体清晰度、阅读流畅，并深度管理色彩资源。
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/1b7c7a518492427684f1d5260b796cc5.png)
+
+| 色号 | 名称 | 声明 |
+| :--- | :--- | :--- |
+| #000000 | SK_Color_B1 | 用于遮罩蒙层70%透明度 |
+| #111111 | SK_Color_B2 | 用于一级标题、主文本 |
+| #333333 | SK_Color_B3 | 用于二级标题、主文本 |
+| #666666 | SK_Color_B4 | 用于副文本段落 |
+| #999999 | SK_Color_B5 | 用于副文本段落 |
+| #CED3DB | SK_Color_B6 | 用于灰色分隔条、也可用于背景色 |
+| #DDE2EB | SK_Color_B7 | 用于灰色分隔条、也可用于背景色 |
+| #EBF0FA | SK_Color_B8 | 用于灰色分隔条、也可用于背景色 |
+| #F5F9FF | SK_Color_B9 | 用于灰色分隔条、也可用于大面积背景色 |
+| #FFFFFF | SK_Color_B10 | 用于大面积背景色出现 |`
+    }
+  ],
+  ip: [
     {
       title: 'IP介绍',
-      content: `## 福宝IP形象
+      content: `![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/2c9d2daa64d848758ea26aff10ddbc2b.png)
 
-福宝是58数科的官方IP形象，一只可爱的白色水獭。
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/9ee994c3efcc4bfea8b2d89141cd1116.png)
 
-![福宝基础形象](/assets/fubao-hero-designer.png)
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/1f1b8144832e4ef49c46b79c7c498351.png)
 
-### 形象特点
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/e263b79d3a7c44d3b694c75d820dd293.png)
 
-**外形特征：**
-- 白色的毛发
-- 大大的眼睛
-- 圆圆的身材
-- 可爱的表情
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/2604d5825ebc4c3587d089fd5b16de65.png)
 
-**性格特点：**
-- 活泼开朗
-- 聪明伶俐
-- 乐于助人
-- 专业可靠
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/ba7259626e014547ae556bfd25909eb1.png)
 
-### 设计灵感
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/ae6c9dec88f64a41a42a624c675bc73a.png)
 
-灵感来源于水獭的特性：
-- 水獭是聪明灵活的动物
-- 水獭具有亲和力和社交性
-- 水獭象征着财富和吉祥（在中国文化中）`
-    },
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/6319cad37ccd4050bc2ad2b3d8d51011.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/d5fc5d0a03004744afa4ef4f506786cd.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/6495f297024f448e95ccef324627cca0.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/40c43917cfef4c95b9b534b507a34d73.png)`
+    }
+  ],
+  app: [
     {
       title: 'IP手册',
-      content: `## IP使用规范
+      content: `# 📕**项目简况：**
 
-![福宝特写](/assets/fubao-hero-closeup.png)
+## **<mark>2025年金融IP手册完善升级</mark>**
 
-### 基础规范
+#### **58同城金融IP手册完善升级**@陈学志 
 
-1. **最小尺寸**：IP形象最小显示尺寸不小于48px
-2. **留白空间**：IP周围需要保持至少1/4高度的留白
-3. **颜色规范**：必须使用官方指定的配色方案
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/3d5fb9dcbb8a4113828a9a6b67dcca99.png)
 
-### 使用场景
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/205aeed703d84ff3bc0761afeb22a67f.png)
 
-**允许使用：**
-- 品牌宣传材料
-- 产品界面
-- 营销活动
-- 周边产品
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/40e14bee00e5425580e7a4644096688c.png)
 
-**禁止使用：**
-- 歪曲形象
-- 修改配色
-- 用于不相关的商业活动
-- 与其他品牌混合使用
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/b0e33127ecf44a9b91706d4452ff74a8.png)
 
-### 姿态规范
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/18a31221e35944dc99ed8b329eb750fd.png)
 
-标准姿态应保持正面朝向，表情友好。
-特殊姿态需经过品牌部门审核。
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/2ef4feb831d94d5287840cf8a227aa98.png)
 
-![IP形象展示](/assets/203752305-298d7ab63f3c0cad8e843825e5fb78671e5481b9f4b4e09502f4552b705a1f52.png)`
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/4fc696cd923f43ea8c5ea15c0acb925e.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/94ac7bb6d37f47148c019022ea36b53b.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/e4fb0ca8c09c488abd0cabe89968e36b.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/84f2e6fc1f2e44c5abecbbe57f272a28.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/e7278e2c101648a6af1e9389664e8be8.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/a1c5d350766b4247b9e316b97bdb914c.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/e39fcabe09b348ea9c6418932f71fbac.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/552e5cf1fb054144bd60b50815229b2f.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/709a2da0422a4cd0bdd438302e33d326.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/afe339b91d164bb6b8156a424bf80f65.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/d5afd0ec5f8149caa2490d0e85babff6.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/3c839438fddc48c2b3092ab49ca4b5d9.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/5846d0aafec54235b8cc75ba8d709c03.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/2c88ffff61404efd920585bc1f1de2d2.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/731beb2d891c4ebfacd4ab66da96071b.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/f6c33d2dc3ed4a1b968baadcffb2c896.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/2f56076d394645ab8828a1366e7252ee.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/cf978b38679f48348ee401e2b3c06b80.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/b341936d583b41c186b0fbf8e8dabc33.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/509b21fc33ee46d39600397a99b44cb4.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/fd486ab8d4fa4ea5af795e01554f52f2.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/74c6406e15d541ce82086423c6504113.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/10583101fa204a0a9475c553c528bfd3.png)`
+    },
+    {
+      title: '使用原则',
+      content: `![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/efc931157fe04f13a1d45a6fb04e715d.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/09cc3195ba334ddd8804873d326dc452.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/6466d234165644ea899237f6c4f835ef.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/ac6cc7233fec4d009b12d1519e068567.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/662d9fcabbb4423c95e8a2e7a5deb754.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/a81b862b58364b07b213d9e1205f9579.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/b3ec002930274f29b264067f1e4d534c.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/821dc11c8ed640b590e7e1b67abca31e.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/e609ce5f2ad64219bfeaa0d0dc2e2cf9.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/dd25e6550c5f4ce7bc64361fe619d56f.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/929c47dd40e441c28465daa78f4be57c.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/16116843ea0c4233a0705a5ec03d0851.png)`
+    },
+    {
+      title: '线上应用案例',
+      content: `![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/f43195881fdf4a2c9f52a9e87b6a5521.png)![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/f26f43e967e84d318d5095c8a6d42cea.png)![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/a9e024ddd42f47de95a805dd5e96f4a4.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/a649e0f2ed42472881ea0e01e850f901.png)![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/883c51d4da72423b87084e49b53453e0.png)![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/613fdcd93c324fe3aa0cfcfa34c7f5da.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/25c77811b44148d88ca0ab097c74fe0f.png)![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/6060260fb3df40acac899d6140f871d8.png)![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/d6ae63cd32f74e9888fb81aae4fce6a0.png)![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/4000c45afc4a493f9b6645a271fcc43f.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/ad43ab00cf5543cca89147344fb1c3de.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/9a5de8c1cd1943149a0bdbfa5bf74d66.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/a74d8c66a0fa44739ab167760bdc53d6.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/02ce401c156449c9a072b04b4b25e50b.png)
+
+**保险**
+
+【近期上线IP相关页面】
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/cac0491f885847e2abafb1666860be83.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/5b6dd82c5cdd4432818b3d8b10d261a5.png)
+
+【可植入ip替换页面】
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/9f79583d3edb419e95ff7976896203d4.png)`
+    },
+    {
+      title: '错误示例',
+      content: `![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/d8bd49d04cbb4ffeb28af59a62554560.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/967a1e68b5764b0683122a3cac95da2e.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/ef957fec17fd40f793898ae2b66dac3c.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/963d4f0498e348eaa4c33378d5557277.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/df7c87cbed3c4e16aae59cea8572ab5e.png)`
     }
   ],
   ui: [
     {
-      title: 'UI线上规范',
-      content: `## UI设计规范
-
-### 设计原则
-
-1. **一致性**：保持视觉风格的统一
-2. **清晰性**：信息层级清晰明了
-3. **易用性**：操作流程简单直观
-4. **美观性**：视觉效果美观大方
-
-### 布局规范
-
-- 使用8px网格系统
-- 内容区域最大宽度1200px
-- 移动端响应式适配
-
-### 间距规范
-
-- 页面边距：24px（桌面）/ 16px（移动端）
-- 卡片间距：16px
-- 内容间距：8-16px`
-    },
-    {
       title: '设计原则',
-      content: `## 核心设计原则
+      content: `本规范旨在标准化品牌 IP 在 UI 界面的应用，遵循情感共鸣、圆润融合、主次分明三大原则。内容涵盖弹窗、缺省页、结果页等核心场景的设计与交互规范，旨在提升品牌亲和力与用户体验。
 
-![设计原则图示](/assets/KuaPai_AI_20260603170845.jpeg)
+## **设计原则**
 
-### 1. 清晰性
+IP形象作为品牌的情感化载体，在UI界面中的应用应遵循以下原则，以提升产品的亲和力和用户体验。
 
-信息层级清晰，用户能快速找到所需内容。
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/2d0f9437baf14678af6de49b219d26bf.png)
 
-### 2. 一致性
+## **基础应用原则**
 
-保持视觉风格、交互模式的统一。
+IP在UI页面中均使用3D IP形象
 
-### 3. 反馈及时
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/c10686377a1d4dd781661a740ac343a6.png)
 
-所有操作都应有明确的反馈。
+IP运用需由背景衬底，如角度渐变、弥散渐变、纯色等
 
-### 4. 容错性
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/4e61646b262e45399ad8e4780e82ea1c.png)
 
-提供清晰的错误提示和恢复路径。
-
-### 5. 高效性
-
-减少操作步骤，提升完成效率。
-
-## 交互原则
-
-- 操作可撤销
-- 状态可感知
-- 加载有提示
-- 错误有引导`
-    },
-    {
-      title: '与弹窗结合规范',
-      content: `## 弹窗设计规范
-
-### 弹窗类型
-
-**模态弹窗**
-- 用于重要操作确认
-- 覆盖整个页面
-- 必须用户操作才能关闭
-
-**非模态弹窗**
-- 用于次要信息展示
-- 不阻塞页面操作
-- 可自动消失
-
-### 设计规范
-
-- 圆角：16px
-- 阴影：0 8px 32px rgba(0,0,0,0.12)
-- 内边距：24px
-- 按钮间距：12px
-
-### 按钮顺序
-
-主按钮在右侧，次按钮在左侧。`
-    },
-    {
-      title: '与弹框结合规范',
-      content: `## 弹框设计规范
-
-### 弹框组件
-
-**Toast提示**
-- 用于临时通知
-- 自动消失（3-5秒）
-- 位于页面顶部或底部
-
-**ActionSheet**
-- 用于操作选择
-- 从底部弹出
-- 包含取消按钮
-
-**Dialog对话框**
-- 用于重要确认
-- 居中显示
-- 包含标题、内容、按钮
-
-### 样式规范
-
-- 背景：rgba(0,0,0,0.5)
-- 动画：从底部滑入/淡入
-- 遮罩可点击关闭`
-    },
-    {
-      title: '在页面中的应用规范',
-      content: `## 页面应用规范
-
-### 首页设计
-
-- Hero区域突出核心价值
-- 功能入口清晰可见
-- 信息层级分明
-
-### 列表页设计
-
-- 使用卡片式布局
-- 信息展示完整
-- 支持筛选和排序
-
-### 详情页设计
-
-- 内容排版清晰
-- 操作按钮醒目
-- 相关推荐合理
-
-### 表单页设计
-
-- 标签与输入框对齐
-- 必填项有标识
-- 错误提示即时显示`
-    },
-    {
-      title: '缺省页与结果页应用规范',
-      content: `## 缺省页设计
-
-### 空状态
-
-- 友好的提示文案
-- 引导用户操作
-- 简洁的插图
-
-### 错误状态
-
-- 明确的错误原因
-- 可行的解决方案
-- 返回上一页的入口
-
-## 结果页设计
-
-### 成功页
-- 明确的成功标识
-- 核心信息展示
-- 后续操作引导
-
-### 失败页
-- 友好的失败提示
-- 失败原因说明
-- 重试或返回入口`
-    },
-    {
-      title: 'IP态态图',
-      content: `## IP动态表情
-
-![IP动态表情示例](/assets/210239371-9a493e1d348433b79ca374a9e1ebf2c72f22a12e10ce9706b4153e083a08d7f3.png)
-
-### 常用表情
-
-**开心** - 用于成功操作
-**思考** - 用于加载状态
-**疑问** - 用于提示信息
-**加油** - 用于鼓励用户
-**庆祝** - 用于完成重大任务
-
-### 使用场景
-
-- 操作成功后的反馈
-- 加载过程中的状态提示
-- 错误发生时的安抚
-- 特殊节日的祝福`
-    },
-    {
-      title: 'IP态态图侧',
-      content: `## IP动态表情扩展
-
-![IP动态表情扩展](/assets/211700437-6899d67fb72faadcc73894ad20117b1aaafbe312c19c9b86ba02ab0a0120a806 (1).png)
-
-### 扩展表情
-
-**挥手** - 欢迎用户
-**点赞** - 表示认可
-**害羞** - 表示不好意思
-**惊讶** - 表示意外
-**奋斗** - 表示努力
-
-### 使用规范
-
-- 根据场景选择合适的表情
-- 避免过度使用
-- 保持表情的一致性`
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/c7481dee40bb4d2f8abc3f3f7e95db6a.png)`
     },
     {
       title: '流程可用性规范',
@@ -668,197 +629,316 @@ APP
 - 提供输入提示
 - 实时验证反馈
 
-### 错误处理
+### 可用性矩阵
 
-- 即时验证
-- 清晰提示
-- 定位到错误位置
-- 提供修正建议`
+| 场景 | 允许使用IP | 推荐位置 | 备注 |
+| :--- | :--- | :--- | :--- |
+| 首页Banner | 是 | 右侧或底部 | 作为装饰元素 |
+| 列表页 | 否 | - | 避免干扰信息阅读 |
+| 详情页 | 是 | 顶部或底部 | 配合内容使用 |
+| 表单页 | 是 | 顶部 | 增加亲和力 |
+| 结果页 | 是 | 居中 | 传达情感反馈 |`
     },
     {
-      title: '浮层可用性规范',
-      content: `## 浮层设计规范
+      title: 'IP状态图例',
+      content: `### **正向反馈状态图例**
 
-### 浮层类型
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/1758c9a642884d819e29f5dbaf34fc33.png)
 
-**Tooltip**
-- 鼠标悬停时显示
-- 简短的说明文字
-- 自动消失
+### **负向反馈状态图例**
 
-**Popover**
-- 点击触发
-- 包含操作选项
-- 点击外部关闭
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/6d275cca86aa450f976187b99ee907f4.png)
 
-**Dropdown**
-- 选择列表
-- 支持搜索过滤
-- 可多选
+### **中性反馈状态图例**
 
-### 设计规范
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/94b60acdee0a4f849ce27e3db7da5c26.png)
 
-- 圆角：8px
-- 阴影：0 4px 16px rgba(0,0,0,0.08)
-- 最大宽度：400px`
+## **自由度与自定义规范**
+
+- 可根据业务属性，对插图元素 & 颜色进行调整
+
+- 插图中高亮辅助色需与业务同色系，且明度饱和度不得超过业务主色
+
+- IP形象本身不可修改（保持品牌一致性）
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/93a09e77a32e45d8a89fcd21a54908c7.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/dda3b42f88cd4d73a706e92ab0d6d8f9.png)
+
+### **未提及场景处理**
+
+上文未提及场景，可根据本规范的核心原则进行补充添加。建议遵循以下流程：
+
+1. 确认场景情感属性（正向/负向/中性）
+
+2. 选择对应背景色系
+
+3. 按IP尺寸规范选择合适尺寸
+
+4. 确认流程可用性矩阵中的许可
+
+5. 提交设计审核`
     },
     {
-      title: '使用原则-场景/运营',
-      content: `## 场景运营规范
+      title: '缺省页与结果页规范',
+      content: `## **缺省页应用规范**
 
-### 运营活动设计
+缺省页是IP缓解用户负面情绪的核心场景，需基于32px栅格比例等比放大至相应尺寸，确保视觉和谐。
 
-**活动入口**
-- 明显的入口标识
-- 吸引人的文案
-- 清晰的利益点
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/28e84228120441f095e35532332ea76e.png)
 
-**活动页面**
-- 信息层级清晰
-- 操作流程简洁
-- 视觉效果吸引
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/b69105297f6c476299bc84128ce6e23f.png)
 
-### 节日主题
+###### 缺省状态情感化文案
 
-**节日元素**
-- 符合节日氛围
-- 融入品牌元素
-- 不过度装饰
+| 场景状态 | 文案内容 |
+| :--- | :--- |
+| **加载失败** | 即使暂时停滞，也是前进路上的小憩 |
+| 每一个失败，都是成功的前奏 |
+| 面对挑战，海獭从不言弃 |
+| **暂无数据** | 没有数据的页面，也是新开始的空白画布 |
+| 空白也是一种美，等待被探索和填充 |
+| 每一次空白，都是填充新内容的机会 |
+| 在这片无数据的海洋中，新知识的岛屿正等着被发现 |
+| **暂无身份** | 每个人都是独一无二的，我们正努力识别你的光芒 |
+| 在寻找中成长，在等待中发现自我 |
+| 身份不仅仅是标签，而是你独特的故事 |
+| 暂时的迷茫，是发现自我的开始 |
+| 我们在寻找真正的你，独一无二的存在 |
+| **网络异常** | 即使网络暂时断线，我们的连接永不中断 |
+| 网络可能暂时迷路，但我们的目标始终如一 |
+| 在技术的海洋里，偶尔的波涛不惧 |
+| 让我们一起等待信号，就像等待潮汐的回归 |
 
-**活动规范**
-- 提前规划
-- 统一风格
-- 及时上线`
+## **结果页应用规范**
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/04ae0fefb87b4bf7a84e826e258818ff.png)
+
+###### 正向反馈情感化文案
+
+| 场景状态 | 文案内容 |
+| :--- | :--- |
+| ###### 成功<br>###### | 星光不问赶路人，时光不负有心人。 |
+| 不是每一次寻宝都会有收获，但你做到了 |
+| 每一份额度，都是向未来的一次勇敢迈步 |
+| ###### 维稳<br>###### | 在你的旅途中，我们是你坚实的后盾 |
+| 每一份保障，都是我们对你幸福的承诺 |
+| 为梦想加油，为未来保驾护航 |
+| 在风雨和阳光中，我们一直在你身边 |
+| 安心每一步，因为我们同行 |
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/bac3c1018e304df6bcd46fe398daba1a.png)
+
+###### 负向反馈情感化文案
+
+| 状态 | 文案内容 |
+| :--- | :--- |
+| ###### 等待 | 每一刻等待，都是未来的铺垫 |
+| 海浪的耐心，终将拥抱岸边 |
+| 在潮起潮落中，寻找宁静的力量 |
+| 海洋教会我们，每个浪花都值得等待 |
+| 让海风吹走焦虑，潮涨潮落自有时 |
+| 最漫长的等待，也值得最美的梦想 |
+| 正如海面之下的深沉，耐心藏着最珍贵的珍珠 |
+| 潮起潮落，我们一同等待曙光 |
+| 现在，轮到你等待那惊喜的一刻 |
+| 海的另一边，是未知的世界，但我愿意等 |
+| 好事多磨，但每一次等待都值得 |
+| ###### 失败 | 生活就像一盒巧克力，你永远不知道你会得到什么 |
+| 失败不是终点，而是另一个开始的机会 |
+| 海洋广阔，不止一条航线通往梦想 |
+| 转舵向海，每个浪涛都是新的机遇 |
+| 每个结束，都是新开始的信号 |
+
+## **IP空状态与结果页图例**
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/6e3f35291482434e9157640710effd8e.png)
+
+## **自由度**
+
+- 可根据业务属性，对插图元素&颜色进行调整；
+
+- 插图中高亮辅助色需与业务同色系，且明度饱和度不得超过业务主色
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/c04560799c9a441a9c13082bcfb6e55b.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/cbb0c5e6bb0446a1bc7e78fe9943589a.png)
+
+上文未提及场景，可根据规范进行补充添加`
     },
     {
-      title: '福宝线上应用案例',
-      content: `## 福宝应用案例
+      title: '与弹窗结合规范',
+      content: `弹窗是强引导场景，IP的加入旨在弱化打断感，增强趣味性。但需严格遵循下方的核心设计规范，在视觉表现与交互体验之间取得最佳平衡。
 
-![福宝应用场景](/assets/KuaPai_AI_20260603171614.jpeg)
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/a22c85dfa6554002a743b07fcdf75c03.png)
 
-### 登录页
-- 欢迎语展示
-- 引导用户登录
-- 友好的提示
+- **比例控制原则**
 
-### 首页
-- 功能入口引导
-- 个性化推荐
-- 活动展示
+IP形象可适度超出弹窗上沿进行"破形"排列以增强层次感，但建议超出高度严格控制在IP自身高度的**1/3**以内，以维持整体视觉的重心稳定。
 
-### 详情页
-- 内容介绍
-- 操作引导
-- 相关推荐
+- **交互避让红线**
 
-### 成功页
-- 庆祝动画
-- 结果展示
-- 后续引导
+IP形象的任何部分**绝对不可遮挡**关键控件，特别是**关闭按钮 (X)**及**主操作按钮**。必须预留充足的交互热区，确保用户操作路径畅通无阻。
 
-### 错误页
-- 安抚用户
-- 解决方案
-- 返回入口`
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/c9fa3b9efd464aa2af0b515c1b889f6f.png)
+
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/5dfdf9b292684fceb5248d80e5059f78.png)
+
+根据弹窗类型，采用不同的IP组合模式，实现视觉与功能的最佳平衡
+
+### **弹窗IP位置规范**
+
+| <mark>**弹窗类型**</mark> | <mark>**IP位置**</mark> | <mark>**IP尺寸**</mark> | <mark>**组合模式**</mark> |
+| :--- | :--- | :--- | :--- |
+| 确认弹窗 | 弹窗上方居右或居中，可破形 | 高度弹性区间：200-400px | IP + 标题 + 说明 + 按钮 |
+| 提示弹窗 | 弹窗上方居右或居中，可破形 | 高度弹性区间：200-400px | IP + 标题 + 说明 + 按钮 |
+| 活动/营销弹窗 | 弹窗上方，可破形 | 高度弹性区间：200-400px | IP + 标题 + 内容 + 按钮 |
+| 轻提示Toast | 容器内左侧或内右侧 | 高度不小于100px | IP + 文案 |
+| 底部弹窗 | 弹窗上方居右或居中，可破形 | 高度弹性区间：200-400px | IP + 标题 + 列表 + 按钮 |
+
+**核心约束：**
+
+- IP上沿可超出弹窗 ≤ 自身高度1/3
+
+- IP下沿距离标题文字 ≥ 32px
+
+- 关闭按钮热区范围：88×88px，IP不得进入此区域
+
+- 主操作按钮上方：IP不得遮挡按钮及其上方16px区域`
     },
     {
-      title: '错误示例',
-      content: `## 错误使用示例
+      title: '在页面中的应用规范',
+      content: `从避让原则到视觉层级，打造不干扰信息传达的辅助视觉体系
 
-### 禁止行为
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/7779d692590944c3a2f37dc380d92bf3.png)
 
-**1. 颜色修改**
-- 禁止随意改变福宝的颜色
-- 禁止使用不和谐的配色
+![图片](https://lantaipt016.58wos.com.cn/uVARqPoNmuyu/lantaisystemfile/e685ddc540cf48d2a5c6efcd43b108f9.png)
 
-**2. 形态修改**
-- 禁止扭曲变形
-- 禁止添加无关元素
-- 禁止遮挡重要特征
+**核心约束：**
 
-**3. 使用场景**
-- 禁止用于不恰当的场景
-- 禁止与其他品牌混用
-- 禁止用于负面内容
+- P形象不得遮挡关键信息文本、按钮、导航元素
 
-### 正确示例
+- IP色彩需与页面整体色调协调，不可过于跳脱
 
-保持福宝的原始形态和配色，在适当的场景中使用。`
+- 同一页面内IP出现次数不超过1处（浮标除外）
+
+- IP动画时长不超过5秒，避免持续分散注意力`
     }
   ]
 };
 
-async function load() {
-  try {
-    // Try API first, fallback to mock data
-    handbookData = await fetch('/api/handbook').then(r => r.json());
-    renderSidebar();
-    if (handbookData.brand && handbookData.brand.length) selectDoc('brand', 0);
-  } catch(e) {
-    // Fallback to mock data
-    handbookData = mockHandbookData;
-    renderSidebar();
-    if (handbookData.brand && handbookData.brand.length) selectDoc('brand', 0);
-  }
+function renderMarkdown(text) {
+  text = text.replace(/^### (.+)$/gm, '<h4>$1</h4>');
+  text = text.replace(/^## (.+)$/gm, '<h3>$1</h3>');
+  text = text.replace(/^# (.+)$/gm, '<h2>$1</h2>');
+  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  text = text.replace(/!\[图片\]\((.+?)\)/g, '<img src="$1" alt="图片" />');
+  text = text.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>');
+  text = text.replace(/^\|(.+)\|$/gm, function(match) {
+    const parts = match.split('|').map(p => p.trim()).filter(p => p);
+    if (parts.length > 1) {
+      return '<tr><td>' + parts.join('</td><td>') + '</td></tr>';
+    }
+    return match;
+  });
+  text = text.replace(/^- (.+)$/gm, '<li>$1</li>');
+  text = text.replace(/(<li>.+<\/li>)/g, function(match) {
+    if (!match.includes('</ul>')) {
+      return '<ul>' + match + '</ul>';
+    }
+    return match;
+  });
+  text = text.replace(/\n\n/g, '</p><p>');
+  text = text.replace(/<\/ul>\n<ul>/g, '');
+  text = text.replace(/(<tr>.+<\/tr>)/g, function(match) {
+    if (!match.includes('</table>')) {
+      return '<table><thead>' + match + '</thead></table>';
+    }
+    return match;
+  });
+  text = text.replace(/<thead>(<tr>.*<\/tr>)<\/thead><table>/g, '<table><thead>$1</thead>');
+  text = text.replace(/<table><thead>(<tr>.*<\/tr>)<\/thead><\/table>/g, '<table><thead>$1</thead><tbody></tbody></table>');
+  text = text.replace(/<table><thead>(.+?)<\/thead>(<tr>.*<\/tr>)<\/table>/g, '<table><thead>$1</thead><tbody>$2</tbody></table>');
+  
+  return '<p>' + text + '</p>';
 }
 
 function renderSidebar() {
-  ['brand','ui'].forEach(section => {
-    const docs = handbookData[section];
-    const container = document.getElementById('sidebar-' + section);
-    container.innerHTML = docs.map((d, i) =>
-      `<a class="doc-link" onclick="selectDoc('${section}',${i})" data-section="${section}" data-index="${i}">${esc(d.title)}</a>`
-    ).join('');
+  const brandSidebar = document.getElementById('sidebar-brand');
+  const ipSidebar = document.getElementById('sidebar-ip');
+  const appSidebar = document.getElementById('sidebar-app');
+  const uiSidebar = document.getElementById('sidebar-ui');
+  
+  handbookData.brand.forEach((item, index) => {
+    const link = document.createElement('a');
+    link.className = 'doc-link' + (index === 0 ? ' active' : '');
+    link.href = '#';
+    link.textContent = item.title;
+    link.onclick = () => showContent('brand', index);
+    brandSidebar.appendChild(link);
+  });
+  
+  handbookData.ip.forEach((item, index) => {
+    const link = document.createElement('a');
+    link.className = 'doc-link';
+    link.href = '#';
+    link.textContent = item.title;
+    link.onclick = () => showContent('ip', index);
+    ipSidebar.appendChild(link);
+  });
+  
+  handbookData.app.forEach((item, index) => {
+    const link = document.createElement('a');
+    link.className = 'doc-link';
+    link.href = '#';
+    link.textContent = item.title;
+    link.onclick = () => showContent('app', index);
+    appSidebar.appendChild(link);
+  });
+  
+  handbookData.ui.forEach((item, index) => {
+    const link = document.createElement('a');
+    link.className = 'doc-link';
+    link.href = '#';
+    link.textContent = item.title;
+    link.onclick = () => showContent('ui', index);
+    uiSidebar.appendChild(link);
   });
 }
 
-function selectDoc(section, index) {
-  const doc = handbookData[section][index];
-  if (!doc) return;
-
+function showContent(category, index) {
   document.querySelectorAll('.doc-link').forEach(l => l.classList.remove('active'));
-  const link = document.querySelector(`.doc-link[data-section="${section}"][data-index="${index}"]`);
-  if (link) link.classList.add('active');
-
-  const contentEl = document.getElementById('content');
-  contentEl.innerHTML = `
-    <h2>${esc(doc.title)}</h2>
-    <div style="margin-top:16px">${simpleMarkdown(doc.content || '')}</div>
-  `;
+  
+  let data, sidebarId;
+  switch(category) {
+    case 'brand':
+      data = handbookData.brand;
+      sidebarId = 'sidebar-brand';
+      break;
+    case 'ip':
+      data = handbookData.ip;
+      sidebarId = 'sidebar-ip';
+      break;
+    case 'app':
+      data = handbookData.app;
+      sidebarId = 'sidebar-app';
+      break;
+    case 'ui':
+      data = handbookData.ui;
+      sidebarId = 'sidebar-ui';
+      break;
+  }
+  
+  document.querySelectorAll(`#${sidebarId} .doc-link`)[index].classList.add('active');
+  
+  const content = document.getElementById('content');
+  const item = data[index];
+  content.innerHTML = renderMarkdown(item.content);
 }
 
-function simpleMarkdown(text) {
-  if (!text) return '<p>暂无内容</p>';
-  let html = esc(text);
-  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width:100%;border-radius:8px;margin:8px 0">');
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" style="color:var(--blue)">$1</a>');
-  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
-  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
-  html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-  html = html.replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>');
-  html = html.replace(/^---$/gm, '<hr>');
-  html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
-  html = html.replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>');
-  html = html.replace(/^\|(.+)\|$/gm, (match) => {
-    const cells = match.split('|').filter(c => c.trim());
-    if (cells.every(c => /^[-:]+$/.test(c.trim()))) return '';
-    const isHeader = match.includes('---');
-    const tag = isHeader ? 'th' : 'td';
-    return '<tr>' + cells.map(c => `<${tag}>${c.trim()}</${tag}>`).join('') + '</tr>';
-  });
-  html = html.replace(/\n\n+/g, '</p><p>');
-  html = '<p>' + html + '</p>';
-  html = html.replace(/<p>\s*<\/p>/g, '');
-  html = html.replace(/<p>(<(?:h|ul|table|blockquote|hr)[^>]*>)/g, '$1');
-  html = html.replace(/(<\/(?:ul|table)>)<\/p>/g, '$1');
-  return html;
-}
-
-function esc(s) { const d = document.createElement('div'); d.textContent = String(s); return d.innerHTML; }
-
-load();
+renderSidebar();
+showContent('brand', 0);
 </script>
 </body>
 </html>
