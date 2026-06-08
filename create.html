@@ -188,7 +188,6 @@ async function submit() {
       .then(r => r.ok ? r.json() : (async()=>{const e=await r.json();throw new Error(e.error||'请求失败')})());
 
     let html = '';
-    const fields = [['创意方向','creativeDirection'],['表情','expression'],['动作','action'],['道具','prop'],['穿搭','outfit'],['背景','background']];
     // 创意方向大横幅
     if (d.creativeDirection) {
       html += `<div style="background:linear-gradient(135deg,#ECF5FF,#F0F7FF);border-radius:12px;padding:24px;margin-bottom:20px;border-left:4px solid var(--blue)"><div style="font-size:12px;color:var(--blue);font-weight:700;letter-spacing:1px;margin-bottom:6px">💡 创意方向</div><div style="font-size:17px;font-weight:700;color:var(--text);line-height:1.7">${esc(d.creativeDirection)}</div></div>`;
