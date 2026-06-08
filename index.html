@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>福宝 IP 设计助手 — 58金融</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #1477FF; --blue-light: #ECF5FF; --blue-hover: #005EE6;
+  --orange: #FF6B3D; --orange-light: #FFF3EE;
+  --bg: #F5F9FF; --card: #fff; --text: #05070D; --text2: #596276; --text3: #8B95A7;
+  --border: #DDEBFA; --border-light: #EAF2FC;
+  --success: #16C964; --success-bg: #F0FFF6;
+  --warning: #F5A623; --warning-bg: #FFFCF5;
+  --error: #F43F3F; --error-bg: #FFF5F5;
+  --shadow: 0 1px 4px rgba(0,0,0,0.04), 0 2px 12px rgba(0,0,0,0.03);
+  --shadow-hover: 0 4px 20px rgba(0,0,0,0.07), 0 1px 6px rgba(0,0,0,0.04);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+  background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Accessibility: Skip Link ── */
+.skip-link { position: absolute; top: -100px; left: 16px; background: var(--blue); color: #fff; padding: 8px 16px; border-radius: 0 0 8px 8px; z-index: 1000; font-size: 13px; font-weight: 600; text-decoration: none; transition: top 0.2s; }
+.skip-link:focus { top: 0; }
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* ── Header ── */
+.header {
+  background: rgba(255,255,255,0.86); color: var(--text); padding: 0 40px; height: 72px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid rgba(216,229,245,0.8); position: sticky; top: 0; z-index: 100;
+  backdrop-filter: blur(14px);
+}
+.header-left { display:flex; align-items:center; gap:14px; }
+.header-left .logo {
+  display: none;
+}
+.header-left h1 { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.4px; }
+.header-left .brand-tag { display: none; }
+.header-actions { display: flex; align-items: center; gap: 28px; }
+.login-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: #111; text-decoration: none; font-size: 15px; font-weight: 500;
+}
+.login-link i { font-style: normal; font-size: 20px; line-height: 1; }
+.register-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 46px; padding: 0 24px; border-radius: 999px;
+  background: #000; color: #fff; text-decoration: none;
+  font-size: 16px; font-weight: 800;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+}
+
+/* ── Hero Section ── */
+.hero-section {
+  background:
+    radial-gradient(circle at 62% 25%, rgba(73,152,255,0.18), transparent 36%),
+    radial-gradient(circle at 83% 78%, rgba(101,177,255,0.12), transparent 32%),
+    linear-gradient(135deg, #FBFDFF 0%, #F4F9FF 48%, #EEF6FF 100%);
+  padding: 64px 60px 92px;
+  position: relative; overflow: hidden;
+}
+.hero-section::before {
+  content: ''; position: absolute; top: 62px; right: 280px;
+  width: 360px; height: 360px; background: rgba(211,232,255,0.48);
+  border-radius: 50%;
+}
+.hero-section::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.18) 48%, rgba(255,255,255,0) 100%);
+  pointer-events: none;
+}
+.hero-container {
+  max-width: 1280px; margin: 0 auto; display: flex; align-items: flex-start; gap: 48px;
+}
+.hero-content { flex: 1; position: relative; z-index: 1; }
+.hero-content .greeting { display: none; }
+.hero-content h1 {
+  font-size: 52px; font-weight: 800; line-height: 1.45; letter-spacing: 0;
+  margin-bottom: 12px;
+}
+.hero-content h1 .highlight { color: var(--blue); }
+.hero-content p {
+  font-size: 18px; color: #7A8294; line-height: 1.8;
+  margin-bottom: 0;
+}
+.hero-content .hero-btn { display: none; }
+.hero-visual {
+  flex: 0 0 560px; min-height: 318px;
+  position: relative; z-index: 1;
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-visual .character {
+  width: min(620px, 46vw); height: 340px;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 0;
+  overflow: visible;
+  box-shadow: none;
+  animation: float 6s ease-in-out infinite;
+}
+.hero-visual .character img { width: 112%; height: 112%; object-fit: contain; object-position: 32% center; display: block; }
+.hero-visual .speech-bubble {
+  position: absolute; top: 18px; right: -18px;
+  background: rgba(255,255,255,0.92); padding: 18px 24px 18px 28px;
+  border-radius: 18px; box-shadow: 0 12px 34px rgba(77,120,180,0.14);
+  font-size: 17px; font-weight: 500; color: var(--text);
+  line-height: 1.55;
+  animation: bubblePulse 2s ease-in-out infinite;
+}
+.hero-visual .speech-bubble strong { color: var(--blue); font-size: 20px; margin-right: 8px; }
+.hero-visual .speech-bubble::before {
+  content: ''; position: absolute; left: -12px; top: 50%; transform: translateY(-50%);
+  width: 0; height: 0;
+  border-top: 10px solid transparent;
+  border-right: 12px solid #fff;
+  border-bottom: 10px solid transparent;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes bubblePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* ── Feature Cards ── */
+.feature-section {
+  padding: 0 60px 18px; margin-top: -145px;
+  background: linear-gradient(180deg, rgba(239,247,255,0) 0%, #F5F9FF 42%);
+  position: relative; z-index: 4;
+}
+.feature-container {
+  max-width: 1280px; margin: 0 auto;
+}
+.feature-grid {
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px;
+}
+.feature-card {
+  min-height: 220px;
+  background: rgba(255,255,255,0.72); border-radius: 16px; padding: 24px 22px 20px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.84), 0 18px 50px rgba(57,102,160,0.08);
+  border: 1px solid rgba(182,211,241,0.74);
+  transition: all var(--transition);
+  position: relative; overflow: hidden;
+  backdrop-filter: blur(8px);
+}
+.feature-card::before {
+  content: ''; position: absolute; inset: auto -24px -40px auto;
+  width: 170px; height: 128px; background: radial-gradient(circle, rgba(44,135,255,0.12), transparent 70%);
+  border-radius: 50%; opacity: 1; transition: opacity var(--transition);
+}
+.feature-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-4px);
+  border-color: rgba(69,145,255,0.62);
+}
+.feature-card .icon-wrap {
+  width: 56px; height: 56px;
+  background: linear-gradient(135deg, #EAF4FF, #F9FCFF); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
+  font-size: 24px;
+  box-shadow: 0 14px 30px rgba(35,123,255,0.14);
+}
+.feature-card:hover .icon-wrap { background: linear-gradient(135deg, #F1F7FF, #FFFFFF); }
+.feature-card .icon-wrap i {
+  width: 34px; height: 34px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; background: linear-gradient(135deg, #43A0FF, #126CFF);
+  font-style: normal; font-size: 17px; transition: all var(--transition);
+  box-shadow: 0 8px 18px rgba(20,119,255,0.22);
+}
+.feature-card h3 {
+  font-size: 21px; font-weight: 800; color: var(--text);
+  margin-bottom: 10px; letter-spacing: 0;
+}
+.feature-card p {
+  font-size: 14px; color: #667085; line-height: 1.7;
+  margin-bottom: 48px;
+}
+.feature-card .action-btn {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px;
+  position: absolute; left: 22px; right: 22px; bottom: 18px;
+  width: auto; height: 38px; padding: 0 16px;
+  background: #1A1D26; color: #fff;
+  border: none; border-radius: 999px;
+  font-size: 13px; font-weight: 800;
+  white-space: nowrap;
+  cursor: pointer; transition: all var(--transition);
+}
+.feature-card .action-btn:hover {
+  background: #2D323E;
+  transform: translateX(4px);
+}
+.feature-card .action-btn i { font-size: 14px; }
+
+/* ── Footer ── */
+.footer {
+  text-align: center; padding: 24px 32px; color: var(--text3); font-size: 13px;
+  border-top: 0; background: #F5F9FF;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #CDD3DE; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #B0B8C4; }
+
+/* ── Responsive ── */
+@media (max-width: 960px) {
+  .hero-section { padding: 54px 28px 112px; }
+  .hero-container { flex-direction: column; text-align: center; gap: 22px; }
+  .hero-content h1 { font-size: 38px; }
+  .hero-visual { flex: none; width: 100%; min-height: 300px; }
+  .hero-visual .character { width: 100%; max-width: 560px; height: 300px; }
+  .feature-grid { grid-template-columns: repeat(2, 1fr); }
+  .trust-container { grid-template-columns: 1fr; gap: 24px; }
+  .trust-item + .trust-item { border-left: 0; }
+  .header-center { display: none; }
+}
+@media (max-width: 640px) {
+  .hero-section { padding: 42px 20px 96px; }
+  .header { padding: 0 20px; }
+  .header-left h1 { font-size: 18px; }
+  .header-actions { gap: 14px; }
+  .login-link { display: none; }
+  .register-btn { height: 38px; padding: 0 16px; font-size: 14px; }
+  .hero-content h1 { font-size: 31px; line-height: 1.35; }
+  .hero-content p { font-size: 15px; }
+  .feature-grid { grid-template-columns: 1fr; }
+  .feature-section { padding: 0 20px 28px; margin-top: -54px; }
+  .trust-section { padding: 0 20px 28px; }
+  .tab-bar { padding: 0 24px; }
+  .container { padding: 0 24px; }
+  .hero-visual { flex: none; width: 100%; min-height: 260px; }
+  .hero-visual .character { width: 100%; height: 260px; }
+  .hero-visual .character img { width: 112%; height: 112%; object-position: 32% center; }
+  .hero-visual .speech-bubble { display: none; }
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">跳到主要内容</a>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-left">
+    <h1>福宝 IP 设计助手</h1>
+    <span class="brand-tag">58金融</span>
+  </div>
+  <div class="header-actions">
+    <a class="login-link" href="#"><i>♙</i> 登录</a>
+    <a class="register-btn" href="#">免费注册</a>
+  </div>
+</div>
+
+<!-- Hero Section -->
+<div class="hero-section">
+  <div class="hero-container">
+    <div class="hero-content">
+      <div class="greeting">
+        <span>Hi, 我是福宝</span>
+      </div>
+      <h1><span class="highlight">福宝AI助手</span>，<br>你的专属IP设计管家</h1>
+      <p>从创意到落地，提供专业的IP设计解决方案</p>
+      <button class="hero-btn">
+        <span>🚀</span> 开始使用
+      </button>
+    </div>
+    <div class="hero-visual">
+      <div class="character">
+        <img src="./assets/fubao-hero-closeup.png" alt="福宝IP形象">
+      </div>
+      <div class="speech-bubble">
+        <strong>Hi，</strong>我是福宝<br>让IP设计更简单！
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Feature Cards -->
+<div class="feature-section">
+  <div class="feature-container">
+    <div class="feature-grid">
+      <div class="feature-card" onclick="location.href='./advise.html'">
+        <div class="icon-wrap"><i>★</i></div>
+        <h3>规范顾问</h3>
+        <p>专业解读IP设计规范，提供定制化建议</p>
+        <button class="action-btn">一键咨询IP规范 <i>→</i></button>
+      </div>
+      <div class="feature-card" onclick="location.href='./prompt.html'">
+          <div class="icon-wrap"><i>◆</i></div>
+          <h3>AI生图提示词</h3>
+          <p>AI智能生成创意提示词，激发设计灵感</p>
+          <button class="action-btn">快速生成创意提示词 <i>→</i></button>
+        </div>
+      <div class="feature-card" onclick="location.href='./create.html'">
+        <div class="icon-wrap"><i>!</i></div>
+        <h3>创意工坊</h3>
+        <p>探索多样化IP创意方案，打造独特形象</p>
+        <button class="action-btn">探索IP创意灵感 <i>→</i></button>
+      </div>
+      <div class="feature-card" onclick="location.href='./assets.html'">
+        <div class="icon-wrap"><i>■</i></div>
+        <h3>素材库</h3>
+        <p>海量IP素材资源，助力高效设计</p>
+        <button class="action-btn">获取海量IP素材 <i>→</i></button>
+      </div>
+      <div class="feature-card" onclick="location.href='./handbook.html'">
+        <div class="icon-wrap"><i>▣</i></div>
+        <h3>IP规范手册</h3>
+        <p>查看IP规范手册，确保统一使用标准</p>
+        <button class="action-btn">查看统一使用标准 <i>→</i></button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<div class="footer">58数科 福宝IP设计助手</div>
+
+<script></script>
+</body>
+</html>

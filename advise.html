@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>规范顾问 — 福宝 IP 设计助手</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #1477FF; --blue-light: #ECF5FF; --blue-hover: #005EE6;
+  --orange: #FF6B3D; --orange-light: #FFF3EE;
+  --bg: #F5F9FF; --card: #fff; --text: #05070D; --text2: #596276; --text3: #8B95A7;
+  --border: #DDEBFA; --border-light: #EAF2FC;
+  --success: #16C964; --success-bg: #F0FFF6;
+  --warning: #F5A623; --warning-bg: #FFFCF5;
+  --error: #F43F3F; --error-bg: #FFF5F5;
+  --shadow: 0 1px 4px rgba(0,0,0,0.04), 0 2px 12px rgba(0,0,0,0.03);
+  --shadow-hover: 0 4px 20px rgba(0,0,0,0.07), 0 1px 6px rgba(0,0,0,0.04);
+  --radius: 16px; --radius-sm: 10px;
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:"Inter",-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--text); min-height:100vh; line-height:1.6; -webkit-font-smoothing:antialiased; }
+::-webkit-scrollbar { width:8px; } ::-webkit-scrollbar-track { background:transparent; } ::-webkit-scrollbar-thumb { background:#CDD3DE; border-radius:4px; }
+
+/* Header */
+.header { background:rgba(255,255,255,0.86); padding:0 40px; height:72px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(216,229,245,0.8); position:sticky; top:0; z-index:100; backdrop-filter:blur(14px); }
+.header-left { display:flex; align-items:center; gap:14px; }
+.header-left h1 { font-size:22px; font-weight:800; color:var(--text); letter-spacing:-0.4px; }
+.header-left a { text-decoration:none; color:inherit; }
+.back-link { font-size:14px; color:var(--text3); text-decoration:none; display:flex; align-items:center; gap:6px; transition:color var(--transition); }
+.back-link:hover { color:var(--blue); }
+
+/* Tab Bar */
+.tab-bar { background:#fff; border-bottom:1px solid var(--border); padding:0 40px; display:flex; gap:4px; position:sticky; top:72px; z-index:99; }
+.tab { padding:14px 22px; font-size:14px; font-weight:550; color:var(--text2); cursor:pointer; border:none; background:none; border-bottom:2.5px solid transparent; transition:all var(--transition); font-family:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
+.tab:hover { color:var(--blue); background:var(--blue-light); }
+.tab.active { color:var(--blue); border-bottom-color:var(--blue); font-weight:650; }
+
+/* Layout */
+.container { max-width:1040px; margin:32px auto; padding:0 28px; }
+.card { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border-light); padding:32px; margin-bottom:24px; }
+.card-header { margin-bottom:22px; }
+.card-header h2 { font-size:22px; font-weight:800; margin-bottom:4px; }
+.card-header .subtitle { font-size:13px; color:var(--text3); }
+
+/* Mode Switch */
+.mode-switch { display:flex; gap:0; background:#F3F4F8; border-radius:var(--radius-sm); padding:4px; margin-bottom:20px; width:fit-content; }
+.mode-btn { padding:10px 22px; border:none; background:none; font-size:13px; font-weight:600; color:var(--text2); cursor:pointer; border-radius:7px; font-family:inherit; transition:all var(--transition); }
+.mode-btn:hover { color:var(--text); }
+.mode-btn.active { background:#fff; color:var(--blue); box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+
+/* Form */
+.form-group { margin-bottom:18px; }
+.form-group label { display:block; font-size:13px; font-weight:600; margin-bottom:6px; color:var(--text); }
+.form-group textarea { width:100%; padding:12px 16px; border:1.5px solid var(--border); border-radius:var(--radius-sm); font-size:14px; font-family:inherit; color:var(--text); background:#FAFBFC; resize:vertical; min-height:90px; line-height:1.7; transition:all var(--transition); }
+.form-group textarea:focus { outline:none; border-color:var(--blue); background:#fff; box-shadow:0 0 0 3px rgba(20,119,255,0.06); }
+
+/* Buttons */
+.btn { display:inline-flex; align-items:center; gap:7px; padding:11px 28px; border:none; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit; transition:all var(--transition); }
+.btn-primary { background:#000; color:#fff; box-shadow:0 10px 24px rgba(0,0,0,0.12); }
+.btn-primary:hover { background:#1a1a1a; transform:translateY(-1px); box-shadow:0 12px 28px rgba(0,0,0,0.16); }
+.btn-primary:disabled { opacity:0.55; cursor:not-allowed; transform:none; box-shadow:none; }
+
+/* Results */
+.result { display:none; margin-top:24px; }
+.result.show { display:block; animation:fadeIn 0.3s ease-out; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+.answer-card { background:#FAFBFC; border-radius:var(--radius-sm); padding:20px 24px; font-size:15px; line-height:1.9; color:var(--text); border-left:4px solid var(--blue); }
+
+.result-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; margin-top:12px; }
+.result-item { background:#FAFBFC; border-radius:var(--radius-sm); padding:16px; border:1px solid var(--border-light); }
+.result-item .label { font-size:11px; color:var(--text3); margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px; font-weight:600; }
+.result-item .value { font-size:15px; font-weight:650; color:var(--text); }
+
+.check-result { padding:12px 16px; border-radius:var(--radius-sm); margin-top:8px; font-size:13px; font-weight:500; }
+.check-result.error { background:var(--error-bg); border-left:4px solid var(--error); color:#C53030; }
+.check-result.warning { background:var(--warning-bg); border-left:4px solid var(--warning); color:#925D10; }
+.check-result.pass { background:var(--success-bg); border-left:4px solid var(--success); color:#1A7A3A; }
+
+.tag { display:inline-flex; align-items:center; gap:4px; padding:5px 13px; border-radius:20px; font-size:12px; font-weight:550; }
+.tag.blue { background:var(--blue-light); color:var(--blue); }
+
+.spinner { display:inline-block; width:18px; height:18px; border:2px solid rgba(255,255,255,0.3); border-top-color:#fff; border-radius:50%; animation:spin .8s linear infinite; vertical-align:middle; }
+@keyframes spin { to{transform:rotate(360deg)} }
+
+.error-msg { background:var(--error-bg); border:1px solid #FCC; border-radius:var(--radius-sm); padding:11px 16px; color:var(--error); font-size:13px; margin-top:12px; display:none; }
+.section-title { font-size:15px; font-weight:700; margin:8px 0 12px; padding-bottom:8px; border-bottom:1px solid var(--border-light); }
+
+.footer { text-align:center; padding:28px; color:var(--text3); font-size:13px; border-top:1px solid var(--border-light); margin-top:48px; }
+
+@media(max-width:640px) {
+  .header { padding:0 20px; }
+  .tab-bar { padding:0 20px; overflow-x:auto; }
+  .tab { padding:12px 14px; font-size:12px; white-space:nowrap; }
+  .container { padding:0 16px; }
+  .card { padding:24px; }
+  .header-left h1 { font-size:18px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left">
+    <a href="./index.html"><h1>福宝 IP 设计助手</h1></a>
+  </div>
+  <a href="./index.html" class="back-link">← 返回首页</a>
+</header>
+
+<nav class="tab-bar">
+  <a class="tab active" href="./advise.html">🎯 规范顾问</a>
+  <a class="tab" href="./prompt.html">✨ 提示词生成</a>
+  <a class="tab" href="./create.html">💡 创意工坊</a>
+  <a class="tab" href="./assets.html">🖼️ 素材库</a>
+  <a class="tab" href="./handbook.html">📖 IP规范手册</a>
+</nav>
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h2>规范顾问</h2>
+      <p class="subtitle">查规范、场景决策，智能规范助手</p>
+    </div>
+
+    <div class="mode-switch">
+      <button class="mode-btn active" data-mode="ask" onclick="switchMode('ask')">💬 查规范</button>
+      <button class="mode-btn" data-mode="scene" onclick="switchMode('scene')">🎯 场景决策</button>
+    </div>
+
+    <div class="form-group">
+      <label id="advise-label">输入问题</label>
+      <textarea id="advise-input" placeholder="例如：弹窗IP应该离关闭按钮多远？"></textarea>
+    </div>
+    <button class="btn btn-primary" onclick="submit()">🔍 查询</button>
+    <div id="error-msg" class="error-msg"></div>
+    <div id="result" class="result"></div>
+  </div>
+</div>
+
+<div class="footer">58数科 福宝IP设计助手</div>
+
+<script>
+let mode = 'ask';
+
+function switchMode(m) {
+  mode = m;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`[data-mode="${m}"]`).classList.add('active');
+  const lb = document.getElementById('advise-label');
+  const inp = document.getElementById('advise-input');
+  if (m === 'ask') { lb.textContent = '输入问题'; inp.placeholder = '例如：弹窗IP应该离关闭按钮多远？正向反馈用什么背景？'; }
+  else { lb.textContent = '输入场景'; inp.placeholder = '例如：支付成功弹窗、网络异常空状态、活动营销弹窗...'; }
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('error-msg').style.display = 'none';
+}
+
+async function submit() {
+  const v = document.getElementById('advise-input').value.trim();
+  const errEl = document.getElementById('error-msg');
+  if (!v) { errEl.textContent = '请输入内容'; errEl.style.display = 'block'; return; }
+  errEl.style.display = 'none';
+  const btn = document.querySelector('.btn-primary');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> 查询中...';
+  const resultEl = document.getElementById('result');
+
+  try {
+    let html = '';
+    if (mode === 'scene') {
+      const d = await api('/api/scene', { scene: v });
+      html += `<div class="section-title">📊 场景决策</div><div class="result-grid">`;
+      html += `<div class="result-item"><div class="label">场景类型</div><div class="value">${esc(d.sceneType||'')}</div></div>`;
+      html += `<div class="result-item"><div class="label">流程可用性</div><div class="value">${esc((d.flowAvailability||{}).level||'')}</div></div>`;
+      if (d.config) for (const [k,val] of Object.entries(d.config)) html += `<div class="result-item"><div class="label">${esc(k)}</div><div class="value">${esc(val||'')}</div></div>`;
+      html += `</div>`;
+      if (d.copywriting) html += `<div class="result-item" style="margin-top:10px"><div class="label">📝 匹配文案</div><div class="value" style="font-weight:500">"${esc(d.copywriting)}"</div></div>`;
+      if (d.constraints) { html += `<div style="margin-top:14px"><div style="font-size:13px;font-weight:600;margin-bottom:8px">⚙️ 设计约束</div><div style="display:flex;flex-wrap:wrap;gap:8px">`; d.constraints.forEach(c => { html += `<span class="tag blue">${esc(c)}</span>`; }); html += `</div></div>`; }
+    } else {
+      const d = await api('/api/ask', { query: v });
+      html += `<div class="section-title">📋 查规范</div>`;
+      html += `<div class="answer-card">${esc(d.answer)}</div>`;
+      if (d.hint) html += `<p style="font-size:12px;color:var(--text3);margin-top:10px">💡 ${esc(d.hint)}</p>`;
+    }
+    resultEl.innerHTML = html;
+    resultEl.classList.add('show');
+  } catch (e) {
+    errEl.textContent = e.message; errEl.style.display = 'block';
+  } finally {
+    btn.disabled = false; btn.innerHTML = '🔍 查询';
+  }
+}
+
+async function api(url, body) {
+  const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  if (!r.ok) { const d = await r.json().catch(()=>({})); throw new Error(d.error||'请求失败'); }
+  return r.json();
+}
+function esc(s) { const d = document.createElement('div'); d.textContent = String(s); return d.innerHTML; }
+</script>
+</body>
+</html>
