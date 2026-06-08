@@ -401,7 +401,7 @@ app.get("/api/handbook", (req, res) => {
 
 // ========== API: IP素材库 ==========
 app.get("/api/materials", (req, res) => {
-  const manifestPath = path.join(__dirname, "public", "assets", "manifest.json");
+  const manifestPath = path.join(__dirname, "assets", "manifest.json");
   if (!fs.existsSync(manifestPath)) return res.status(404).json({ error: "素材清单未找到" });
   let items = JSON.parse(fs.readFileSync(manifestPath, "utf-8"));
   const category = req.query.category;
@@ -434,7 +434,7 @@ app.post("/api/materials/upload", (req, res) => {
     // 安全文件名
     const safeName = filename.replace(/[^a-zA-Z0-9_\-一-鿿\.]/g, "_");
     const finalName = safeName.includes(".") ? safeName : safeName + "." + ext;
-    const filePath = path.join(__dirname, "public", "assets", finalName);
+    const filePath = path.join(__dirname, "assets", finalName);
 
     // 避免覆盖：重名加时间戳
     const finalPath = fs.existsSync(filePath)
@@ -445,7 +445,7 @@ app.post("/api/materials/upload", (req, res) => {
     fs.writeFileSync(finalPath, buffer);
 
     // 更新 manifest.json
-    const manifestPath = path.join(__dirname, "public", "assets", "manifest.json");
+    const manifestPath = path.join(__dirname, "assets", "manifest.json");
     const manifest = fs.existsSync(manifestPath) ? JSON.parse(fs.readFileSync(manifestPath, "utf-8")) : [];
     manifest.push({
       file: savedName,
@@ -466,8 +466,8 @@ app.post("/api/materials/upload", (req, res) => {
 app.delete("/api/materials/:filename", (req, res) => {
   try {
     const filename = req.params.filename;
-    const filePath = path.join(__dirname, "public", "assets", filename);
-    const manifestPath = path.join(__dirname, "public", "assets", "manifest.json");
+    const filePath = path.join(__dirname, "assets", filename);
+    const manifestPath = path.join(__dirname, "assets", "manifest.json");
 
     // 安全检查：不允许路径穿越
     if (filename.includes("..") || filename.includes("/")) {
