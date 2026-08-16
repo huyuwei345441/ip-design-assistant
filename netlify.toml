@@ -1,0 +1,28 @@
+[build]
+  base = "."
+  publish = "."
+  functions = "netlify/functions"
+  command = "npm install && node build-data.js"
+
+[functions]
+  external_node_modules = ["express"]
+
+[[redirects]]
+  from = "/api/generate-image/*"
+  to = "/.netlify/functions/generate-image/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/api/generate-image"
+  to = "/.netlify/functions/generate-image"
+  status = 200
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
