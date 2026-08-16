@@ -216,9 +216,26 @@ function inferOutfit(occ) {
 // ========== API: AI 状态检测 ==========
 app.get("/api/status", (req, res) => {
   const ai = getAIClient(req);
+  // 调试：确认 header key 是否被正确读取（仅输出长度/首字符，避免泄露完整 Key）
+  let headerKey = null;
+  if (req) {
+    if (typeof req.get === "function") headerKey = req.get("x-api-key");
+    if (!headerKey && req.headers) {
+      const h = req.headers;
+      headerKey = h["x-api-key"] || h["X-Api-Key"] || h["X-API-KEY"] || null;
+    }
+  }
+  const keys = Object.keys(req.headers || {}).filter(k => /api|key/i.test(k));
   res.json({
     aiAvailable: !!ai, provider: ai ? ai.provider : null,
-    seedreamAvailable: !!process.env.ARK_API_KEY
+    seedreamAvailable: !!process.env.ARK_API_KEY,
+    debug: {
+      hasHeaderKey: !!headerKey,
+      keyLen: headerKey ? headerKey.length : 0,
+      keyPrefix: headerKey ? headerKey.slice(0, 3) : null,
+      matchingHeaderNames: keys,
+      hasReqGet: typeof req.get === "function"
+    }
   });
 });
 
