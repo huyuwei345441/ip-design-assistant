@@ -142,11 +142,12 @@ const STORAGE_KEY = 'fubao_api_key';
     document.getElementById('api-key-input').value = savedKey;
   }
 
-  // 检查服务器 AI 状态（同时发送本地 Key）
+  // 检查服务器 AI 状态（把 Key 放在 query 参数上传递，兼容性最好）
   try {
-    const headers = {};
-    if (savedKey) headers['x-api-key'] = savedKey;
-    const st = await fetch('/api/status', { headers }).then(r => r.json());
+    const url = savedKey
+      ? '/api/status?api_key=' + encodeURIComponent(savedKey)
+      : '/api/status';
+    const st = await fetch(url).then(r => r.json());
     aiReady = st.aiAvailable;
   } catch (e) { aiReady = false; }
 
@@ -173,11 +174,15 @@ async function submit() {
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> 生成中...';
 
   try {
-    const headers = { 'Content-Type': 'application/json' };
     const savedKey = localStorage.getItem(STORAGE_KEY);
-    if (savedKey) headers['x-api-key'] = savedKey;
+    const body = { requirement: v };
+    if (savedKey) body.api_key = savedKey;
 
-    const d = await fetch('/api/create', { method:'POST', headers, body:JSON.stringify({requirement:v}) })
+    const d = await fetch('/api/create', {
+      method:'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    })
       .then(r => r.ok ? r.json() : (async()=>{const e=await r.json();throw new Error(e.error||'请求失败')})());
 
     let html = '';

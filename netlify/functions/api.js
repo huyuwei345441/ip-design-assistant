@@ -59,17 +59,35 @@ function runScript(scriptName, args = []) {
 }
 
 // ── AI 客户端 ──
-// 优先使用服务器环境变量，其次使用前端通过 x-api-key 请求头传来的 Key
-function getAIClient(req) {
-  let headerKey = null;
-  if (req) {
-    if (typeof req.get === "function") headerKey = req.get("x-api-key");
-    if (!headerKey && req.headers) {
-      const h = req.headers;
-      headerKey = h["x-api-key"] || h["X-Api-Key"] || h["X-API-KEY"] || h["xApiKey"] || null;
-    }
+// 优先顺序：1) 服务器环境变量  2) 请求 query 参数 api_key  3) POST body.api_key  4) x-api-key 请求头
+function extractUserKey(req) {
+  if (!req) return null;
+  // GET /api/status?api_key=xxx 或 POST 请求上附带 query
+  if (req.query && req.query.api_key) return String(req.query.api_key);
+  if (req.query && req.query["api-key"]) return String(req.query["api-key"]);
+  // POST JSON body
+  if (req.body && typeof req.body === "object") {
+    if (req.body.api_key) return String(req.body.api_key);
+    if (req.body["api-key"]) return String(req.body["api-key"]);
   }
-  const geminiKey = process.env.GEMINI_API_KEY || headerKey;
+  // 请求头（Express req.get 大小写无关）
+  try {
+    if (typeof req.get === "function") {
+      const v = req.get("x-api-key");
+      if (v) return String(v);
+    }
+  } catch (_) {}
+  if (req.headers) {
+    const h = req.headers;
+    const v = h["x-api-key"] || h["X-Api-Key"] || h["X-API-KEY"];
+    if (v) return String(v);
+  }
+  return null;
+}
+
+function getAIClient(req) {
+  const userKey = extractUserKey(req);
+  const geminiKey = process.env.GEMINI_API_KEY || userKey;
   if (geminiKey) {
     return {
       provider: "gemini",
@@ -88,7 +106,7 @@ function getAIClient(req) {
       }
     };
   }
-  const apiKey = process.env.ANTHROPIC_API_KEY || headerKey;
+  const apiKey = process.env.ANTHROPIC_API_KEY || userKey;
   if (!apiKey) return null;
   try {
     const Anthropic = require("@anthropic-ai/sdk").default;
@@ -216,26 +234,17 @@ function inferOutfit(occ) {
 // ========== API: AI 状态检测 ==========
 app.get("/api/status", (req, res) => {
   const ai = getAIClient(req);
-  // 调试：确认 header key 是否被正确读取（仅输出长度/首字符，避免泄露完整 Key）
-  let headerKey = null;
-  if (req) {
-    if (typeof req.get === "function") headerKey = req.get("x-api-key");
-    if (!headerKey && req.headers) {
-      const h = req.headers;
-      headerKey = h["x-api-key"] || h["X-Api-Key"] || h["X-API-KEY"] || null;
-    }
-  }
-  const keys = Object.keys(req.headers || {}).filter(k => /api|key/i.test(k));
+  const userKey = extractUserKey(req);
   res.json({
-    aiAvailable: !!ai, provider: ai ? ai.provider : null,
+    aiAvailable: !!ai,
+    provider: ai ? ai.provider : null,
+    model: ai ? ai.model : null,
     seedreamAvailable: !!process.env.ARK_API_KEY,
-    debug: {
-      hasHeaderKey: !!headerKey,
-      keyLen: headerKey ? headerKey.length : 0,
-      keyPrefix: headerKey ? headerKey.slice(0, 3) : null,
-      matchingHeaderNames: keys,
-      hasReqGet: typeof req.get === "function"
-    }
+    keySource: process.env.GEMINI_API_KEY || process.env.ANTHROPIC_API_KEY
+      ? "env"
+      : userKey
+        ? "request"
+        : null
   });
 });
 
