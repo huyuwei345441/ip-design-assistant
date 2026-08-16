@@ -21,14 +21,14 @@ function runScript(scriptName, args = []) {
   });
 }
 
-// 获取 AI 客户端（用户需要自行配置 API Key）
-function getAIClient() {
-  // Google Gemini 免费 API（推荐，每日1500次免费）
-  const geminiKey = process.env.GEMINI_API_KEY;
+// 获取 AI 客户端（优先用用户提供的 Key，其次服务器环境变量）
+function getAIClient(userKey) {
+  // Google Gemini 免费 API
+  const geminiKey = userKey || process.env.GEMINI_API_KEY;
   if (geminiKey) {
     return {
       provider: "gemini",
-      model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
+      model: process.env.GEMINI_MODEL || "gemini-2.0-flash",
       chat: async (systemPrompt, userContent, maxTokens = 1024) => {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${process.env.GEMINI_MODEL || "gemini-2.5-flash"}:generateContent?key=${geminiKey}`;
         const body = {
@@ -136,7 +136,7 @@ app.post("/api/prompt", async (req, res) => {
     const isActivity = /活动|营销|运营|双11|节日|推广|广告|品牌|周边|创意/.test(scene);
     const skipOutfit = isUIState && !isActivity;
 
-    const ai = getAIClient();
+    const ai = getAIClient(req.headers["x-api-key"]);
 
     // ── AI 优化模式 ──
     if (ai) {
@@ -359,8 +359,9 @@ app.post("/api/create", async (req, res) => {
   try {
     const { requirement } = req.body;
     if (!requirement) return res.status(400).json({ error: "请输入业务需求" });
-    const ai = getAIClient();
-    if (!ai) return res.status(500).json({ error: "未配置 API Key。请设置 GEMINI_API_KEY（免费，无需信用卡）或 ANTHROPIC_API_KEY 环境变量" });
+    const userKey = req.headers["x-api-key"] || req.body.apiKey;
+    const ai = getAIClient(userKey);
+    if (!ai) return res.status(500).json({ error: "请提供 GEMINI_API_KEY。在下方输入框中粘贴你的 Key，或到 aistudio.google.com 免费获取" });
     const sourceDocs = loadSourceDocs();
     const text = await aiChat(ai,
       `你是58金融品牌IP"福宝"的创意顾问。福宝是一只软萌可爱的3D卡通海獭形象（不是熊）。以下为IP规范文档，请基于文档内容为用户设计创意方案。\n\n${sourceDocs}\n\n请输出JSON：{"creativeDirection":"创意方向","expression":"表情","action":"动作","prop":"道具","outfit":"穿搭","background":"背景","prompts":["prompt1"],"usageNote":"应用说明"}`,
@@ -368,7 +369,11 @@ app.post("/api/create", async (req, res) => {
       2048
     );
     const m = text.match(/\{[\s\S]*\}/);
-    res.json(m ? JSON.parse(m[0]) : { raw: text });
+    if (m) {
+      try { return res.json(JSON.parse(m[0])); } catch(e) {}
+    }
+    // 降级：把纯文本当创意方向展示
+    res.json({ creativeDirection: text.replace(/\n/g,' ').substring(0,300), usageNote: "AI 返回了非结构化内容，以上为原文摘要" });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
@@ -401,7 +406,7 @@ app.get("/api/handbook", (req, res) => {
 
 // ========== API: IP素材库 ==========
 app.get("/api/materials", (req, res) => {
-  const manifestPath = path.join(__dirname, "public", "assets", "manifest.json");
+  const manifestPath = path.join(__dirname, "assets", "manifest.json");
   if (!fs.existsSync(manifestPath)) return res.status(404).json({ error: "素材清单未找到" });
   let items = JSON.parse(fs.readFileSync(manifestPath, "utf-8"));
   const category = req.query.category;
@@ -434,7 +439,7 @@ app.post("/api/materials/upload", (req, res) => {
     // 安全文件名
     const safeName = filename.replace(/[^a-zA-Z0-9_\-一-鿿\.]/g, "_");
     const finalName = safeName.includes(".") ? safeName : safeName + "." + ext;
-    const filePath = path.join(__dirname, "public", "assets", finalName);
+    const filePath = path.join(__dirname, "assets", finalName);
 
     // 避免覆盖：重名加时间戳
     const finalPath = fs.existsSync(filePath)
@@ -445,7 +450,7 @@ app.post("/api/materials/upload", (req, res) => {
     fs.writeFileSync(finalPath, buffer);
 
     // 更新 manifest.json
-    const manifestPath = path.join(__dirname, "public", "assets", "manifest.json");
+    const manifestPath = path.join(__dirname, "assets", "manifest.json");
     const manifest = fs.existsSync(manifestPath) ? JSON.parse(fs.readFileSync(manifestPath, "utf-8")) : [];
     manifest.push({
       file: savedName,
@@ -466,8 +471,8 @@ app.post("/api/materials/upload", (req, res) => {
 app.delete("/api/materials/:filename", (req, res) => {
   try {
     const filename = req.params.filename;
-    const filePath = path.join(__dirname, "public", "assets", filename);
-    const manifestPath = path.join(__dirname, "public", "assets", "manifest.json");
+    const filePath = path.join(__dirname, "assets", filename);
+    const manifestPath = path.join(__dirname, "assets", "manifest.json");
 
     // 安全检查：不允许路径穿越
     if (filename.includes("..") || filename.includes("/")) {

@@ -5,7 +5,9 @@
   command = "npm install && node build-data.js"
 
 [functions]
+  node_bundler = "esbuild"
   external_node_modules = ["express"]
+  included_files = ["scripts/**", "docs/**", "assets/manifest.json"]
 
 [[redirects]]
   from = "/api/generate-image/*"
