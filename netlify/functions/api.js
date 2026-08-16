@@ -61,7 +61,14 @@ function runScript(scriptName, args = []) {
 // ── AI 客户端 ──
 // 优先使用服务器环境变量，其次使用前端通过 x-api-key 请求头传来的 Key
 function getAIClient(req) {
-  const headerKey = req && req.headers && req.headers["x-api-key"];
+  let headerKey = null;
+  if (req) {
+    if (typeof req.get === "function") headerKey = req.get("x-api-key");
+    if (!headerKey && req.headers) {
+      const h = req.headers;
+      headerKey = h["x-api-key"] || h["X-Api-Key"] || h["X-API-KEY"] || h["xApiKey"] || null;
+    }
+  }
   const geminiKey = process.env.GEMINI_API_KEY || headerKey;
   if (geminiKey) {
     return {
