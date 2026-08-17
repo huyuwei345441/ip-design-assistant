@@ -157,28 +157,52 @@ async function submit() {
     let html = '';
     // 创意方向大横幅
     if (d.creativeDirection) {
-      html += `<div style="background:linear-gradient(135deg,#ECF5FF,#F0F7FF);border-radius:12px;padding:24px;margin-bottom:20px;border-left:4px solid var(--blue)"><div style="font-size:12px;color:var(--blue);font-weight:700;letter-spacing:1px;margin-bottom:6px">💡 创意方向</div><div style="font-size:17px;font-weight:700;color:var(--text);line-height:1.7">${esc(d.creativeDirection)}</div></div>`;
+      html += `<div style="background:linear-gradient(135deg,#ECF5FF,#F0F7FF);border-radius:14px;padding:28px;margin-bottom:20px;border-left:4px solid var(--blue)"><div style="font-size:12px;color:var(--blue);font-weight:700;letter-spacing:1px;margin-bottom:8px">💡 创意方向</div><div style="font-size:18px;font-weight:700;color:var(--text);line-height:1.7">${esc(d.creativeDirection)}</div></div>`;
     }
-    // 核心参数卡片
-    html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:20px">`;
-    const fields = [['表情','expression','😊'],['动作','action','✋'],['道具','prop','🎁'],['穿搭','outfit','👔'],['背景','background','🖼']];
-    fields.forEach(([label,key,icon]) => {
-      if (d[key]) html += `<div style="background:#fff;border:1px solid var(--border-light);border-radius:10px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,0.03)"><div style="font-size:11px;color:var(--text3);margin-bottom:4px">${icon} ${label}</div><div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.6">${esc(d[key])}</div></div>`;
-    });
-    html += `</div>`;
-    // Prompts
+    // 创意概念阐述
+    if (d.concept) {
+      html += `<div style="background:#fff;border:1px solid var(--border-light);border-radius:14px;padding:24px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,0.03)"><div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:12px;display:flex;align-items:center;gap:6px"><span style="font-size:16px">📖</span>创意概念阐述</div><div style="font-size:14px;color:var(--text);line-height:1.9;white-space:pre-wrap">${esc(d.concept)}</div></div>`;
+    }
+    // 场景规划
+    if (d.scenePlan) {
+      html += `<div style="background:#fff;border:1px solid var(--border-light);border-radius:14px;padding:24px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,0.03)"><div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:12px;display:flex;align-items:center;gap:6px"><span style="font-size:16px">🎬</span>场景规划</div><div style="font-size:14px;color:var(--text);line-height:1.9;white-space:pre-wrap">${esc(d.scenePlan)}</div></div>`;
+    }
+    // IP表现方案（表情/动作/道具/穿搭/背景）
+    const detailFields = [
+      {key:'expression',label:'表情设计',icon:'😊',color:'#FF8C42'},
+      {key:'action',label:'动作设计',icon:'🤸',color:'#4ECDC4'},
+      {key:'propDesign',label:'道具设计',icon:'🎁',color:'#FFD93D'},
+      {key:'outfitPlan',label:'穿搭方案',icon:'👔',color:'#9B5DE5'},
+      {key:'backgroundDesign',label:'背景与配色',icon:'🎨',color:'#00BBF9'}
+    ];
+    const hasDetails = detailFields.some(f => d[f.key]);
+    if (hasDetails) {
+      html += `<div style="margin-bottom:18px"><div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:12px;display:flex;align-items:center;gap:6px"><span style="font-size:16px">🐻</span>IP表现方案</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">`;
+      detailFields.forEach(f => {
+        if (d[f.key]) {
+          html += `<div style="background:#fff;border:1px solid var(--border-light);border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.02)"><div style="font-size:12px;font-weight:600;color:${f.color};margin-bottom:8px;display:flex;align-items:center;gap:5px"><span>${f.icon}</span>${f.label}</div><div style="font-size:13px;color:var(--text);line-height:1.8;white-space:pre-wrap">${esc(d[f.key])}</div></div>`;
+        }
+      });
+      html += `</div></div>`;
+    }
+    // Prompt建议
     if (d.prompts && d.prompts.length) {
-      html += `<div style="margin-top:16px"><div style="font-size:13px;font-weight:700;margin-bottom:10px">📝 生成 Prompt</div>`;
+      html += `<div style="margin-bottom:18px"><div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:12px;display:flex;align-items:center;gap:6px"><span style="font-size:16px">📝</span>生图Prompt建议</div>`;
       d.prompts.forEach((p,i) => {
-        html += `<div style="position:relative;background:#FAFBFC;border:1px solid var(--border-light);border-radius:10px;padding:18px 20px;margin-bottom:10px;font-family:'SF Mono',Menlo,monospace;font-size:13px;line-height:1.8;color:var(--text);word-break:break-word">${esc(p)}<button onclick="copyThis(this)" style="position:absolute;top:10px;right:10px;border:none;background:#fff;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;color:var(--text2);box-shadow:0 1px 3px rgba(0,0,0,0.08)">📋 复制</button></div>`;
+        html += `<div style="position:relative;background:#FAFBFC;border:1px solid var(--border-light);border-radius:12px;padding:20px 22px;margin-bottom:12px;font-family:'SF Mono',Menlo,monospace;font-size:13px;line-height:1.9;color:var(--text);word-break:break-word">${esc(p)}<button onclick="copyThis(this)" style="position:absolute;top:10px;right:10px;border:none;background:#fff;border-radius:8px;padding:5px 12px;font-size:12px;cursor:pointer;color:var(--text2);box-shadow:0 1px 3px rgba(0,0,0,0.08)">📋 复制</button></div>`;
       });
       html += `</div>`;
     }
-    // 应用说明 / 原始响应降级
-    if (d.usageNote) html += `<div style="margin-top:16px;background:#FFFCF5;border-radius:10px;padding:16px 20px;border-left:3px solid var(--warning)"><div style="font-size:12px;font-weight:700;color:var(--warning);margin-bottom:4px">📋 应用说明</div><div style="font-size:13px;color:var(--text2);line-height:1.8">${esc(d.usageNote)}</div></div>`;
-    else if (d.raw) html += `<div style="margin-top:16px;background:#FAFBFC;border-radius:10px;padding:16px 20px;border:1px solid var(--border-light)"><div style="font-size:12px;font-weight:700;color:var(--text3);margin-bottom:4px">📄 创意方案原文</div><div style="font-size:13px;color:var(--text2);line-height:1.8;white-space:pre-wrap">${esc(d.raw)}</div></div>`;
+    // 应用指导
+    if (d.usageGuide) {
+      html += `<div style="background:#FFFCF5;border-radius:14px;padding:24px;border:1px solid #FCEFD9;margin-bottom:8px"><div style="font-size:13px;font-weight:700;color:#B8860B;margin-bottom:12px;display:flex;align-items:center;gap:6px"><span style="font-size:16px">📋</span>应用指导</div><div style="font-size:14px;color:var(--text);line-height:1.9;white-space:pre-wrap">${esc(d.usageGuide)}</div></div>`;
+    }
+    // 降级：原始响应
+    if (d.raw && !html) {
+      html = `<div style="margin-top:16px;background:#FAFBFC;border-radius:14px;padding:24px 28px;border:1px solid var(--border-light)"><div style="font-size:13px;font-weight:700;color:var(--text3);margin-bottom:10px">📄 AI 方案原文</div><div style="font-size:14px;color:var(--text2);line-height:1.9;white-space:pre-wrap">${esc(d.raw)}</div></div>`;
+    }
     // 没有有效内容
-    if (!html) html = '<div style="text-align:center;padding:24px;color:var(--text3)">AI 返回格式异常，请重试或更换 API Key</div>';
+    if (!html) html = '<div style="text-align:center;padding:32px;color:var(--text3)">AI 返回格式异常，请重试</div>';
 
     document.getElementById('result').innerHTML = html;
     document.getElementById('result').classList.add('show');

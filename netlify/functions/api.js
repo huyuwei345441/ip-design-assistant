@@ -364,11 +364,120 @@ app.post("/api/create", async (req, res) => {
     const ai = getAIClient(req);
     if (!ai) return res.status(500).json({ error: "未配置 API Key。请设置 GEMINI_API_KEY（免费，无需信用卡）或 ANTHROPIC_API_KEY 环境变量" });
     const sourceDocs = loadSourceDocs();
-    const text = await aiChat(ai,
-      `你是58金融品牌IP"福宝"的创意顾问。福宝是一只软萌可爱的3D卡通海獭形象（不是熊）。以下为IP规范文档，请基于文档内容为用户设计创意方案。\n\n${sourceDocs}\n\n请输出JSON：{"creativeDirection":"创意方向","expression":"表情","action":"动作","prop":"道具","outfit":"穿搭","background":"背景","prompts":["prompt1"],"usageNote":"应用说明"}`,
-      requirement, 2048);
-    const m = text.match(/\{[\s\S]*\}/);
-    res.json(m ? JSON.parse(m[0]) : { raw: text });
+    const systemPrompt = `你是58金融品牌IP"福宝"的资深创意总监。福宝是一只软萌可爱的3D卡通海獭形象（不是熊），以"乐观积极、聪明机智、陪伴守护"为人设。
+
+以下为IP规范文档和品牌知识库（含IP人设、品牌理念、色彩系统、应用规范、线上案例、错误示例等）：
+
+${sourceDocs}
+
+请基于以上知识库内容，为用户的业务需求设计一份详细完整的创意方案。要求：
+
+1. 必须结合知识库中的具体规范（引用品牌理念、色彩系统、IP人设特点、线上应用案例等），不要泛泛而谈
+2. 每个模块的内容要详细充实，使用完整的句子和段落，不要只写短语或标签
+3. 创意方向要紧扣品牌精神（信任为本·可靠 + 科技轻奢·感官）
+4. 所有设计建议必须符合IP应用规范，参考"错误示例"中的反例避免踩坑
+
+请严格按照以下格式输出（每个===标记后面写对应内容，内容可以跨多行）：
+
+===CREATIVE_DIRECTION===
+创意方向（80-150字）
+
+===CONCEPT===
+创意概念阐述（150-300字）
+
+===SCENE_PLAN===
+场景规划（100-200字）
+
+===EXPRESSION===
+表情设计（50-100字）
+
+===ACTION===
+动作设计（50-100字）
+
+===PROP_DESIGN===
+道具设计（50-100字）
+
+===OUTFIT_PLAN===
+穿搭方案（80-150字）
+
+===BACKGROUND_DESIGN===
+背景与配色（80-150字）
+
+===PROMPTS===
+完整生图Prompt1
+---
+完整生图Prompt2
+
+===USAGE_GUIDE===
+应用指导（150-300字）`;
+    const text = await aiChat(ai, systemPrompt, requirement, 4096);
+    // 使用 === 标记解析分段内容
+    const SECTION_MAP = {
+      'CREATIVE_DIRECTION': 'creativeDirection',
+      'CONCEPT': 'concept',
+      'SCENE_PLAN': 'scenePlan',
+      'EXPRESSION': 'expression',
+      'ACTION': 'action',
+      'PROP_DESIGN': 'propDesign',
+      'OUTFIT_PLAN': 'outfitPlan',
+      'BACKGROUND_DESIGN': 'backgroundDesign',
+      'PROMPTS': '_prompts_raw',
+      'USAGE_GUIDE': 'usageGuide'
+    };
+    const result = {};
+    const lines = text.split('\n');
+    let currentKey = null;
+    let currentVal = [];
+    for (const line of lines) {
+      const match = line.trim().match(/^===([A-Z_]+)===$/);
+      if (match) {
+        // 保存上一节
+        if (currentKey) {
+          result[currentKey] = currentVal.join('\n').trim();
+        }
+        currentKey = SECTION_MAP[match[1]] || null;
+        currentVal = [];
+      } else if (currentKey) {
+        currentVal.push(line);
+      }
+    }
+    // 保存最后一节
+    if (currentKey) {
+      result[currentKey] = currentVal.join('\n').trim();
+    }
+
+    // 解析 prompts（用 --- 分隔）
+    if (result._prompts_raw) {
+      result.prompts = result._prompts_raw.split(/^---$/m).map(p => p.trim()).filter(p => p.length > 0);
+      delete result._prompts_raw;
+    } else {
+      result.prompts = [];
+    }
+
+    // 校验必要字段，补全缺失项
+    const fields = ["creativeDirection","concept","scenePlan","expression","action","propDesign","outfitPlan","backgroundDesign","prompts","usageGuide"];
+    const hasContent = Object.values(result).some(v => v && (typeof v === "string" ? v.length > 5 : (Array.isArray(v) && v.length > 0)));
+    if (hasContent) {
+      for (const f of fields) {
+        if (!result[f]) result[f] = "";
+      }
+      if (!Array.isArray(result.prompts)) result.prompts = [];
+      return res.json(result);
+    }
+
+    // 降级：尝试 JSON 解析（兼容旧格式）
+    try {
+      const cleaned = text.replace(/```(json)?/gi, '').trim();
+      const start = cleaned.indexOf('{');
+      const end = cleaned.lastIndexOf('}');
+      if (start !== -1 && end > start) {
+        const jsonObj = JSON.parse(cleaned.substring(start, end + 1));
+        return res.json(jsonObj);
+      }
+    } catch (_) { /* ignore */ }
+
+    // 最终降级：返回原始文本
+    res.json({ raw: text });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
