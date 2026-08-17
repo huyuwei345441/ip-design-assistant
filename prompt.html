@@ -145,11 +145,6 @@ async function submit() {
   });
 
   try {
-    // 与 create 页面共享 API Key（同一个 localStorage 键）
-    const KEY_NAME = 'fubao_api_key';
-    const savedKey = localStorage.getItem(KEY_NAME);
-    if (savedKey) body.api_key = savedKey;
-
     const d = await fetch('/api/prompt', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) })
       .then(r => r.ok ? r.json() : (async()=>{const e=await r.json();throw new Error(e.error||'请求失败')})());
 

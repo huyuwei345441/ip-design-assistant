@@ -97,21 +97,13 @@ body { font-family:"Inter",-apple-system,BlinkMacSystemFont,"PingFang SC","Micro
       <p class="subtitle" id="subtitle">AI 基于 IP 规范和人设，为你的业务需求生成创意方案</p>
     </div>
 
-    <!-- 待接入面板 -->
+    <!-- AI 异常提示面板（仅当服务器未配置 Key 时显示） -->
     <div id="setup-panel" style="display:none;background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border-radius:var(--radius-sm);padding:24px;text-align:center;margin-bottom:18px">
-      <div style="font-size:36px;margin-bottom:8px">🔑</div>
-      <h3 style="font-size:16px;font-weight:700;margin-bottom:6px">AI 功能待接入</h3>
+      <div style="font-size:36px;margin-bottom:8px">⚠️</div>
+      <h3 style="font-size:16px;font-weight:700;margin-bottom:6px">AI 服务暂不可用</h3>
       <p style="font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:12px">
-        配置 API Key 即可启用创意工坊<br>
-        <strong>推荐：Google Gemini（免费，无需信用卡）</strong>
-      </p>
-      <div style="display:flex;gap:8px;max-width:480px;margin:0 auto 8px">
-        <input id="api-key-input" type="password" placeholder="粘贴 GEMINI_API_KEY 或 ANTHROPIC_API_KEY" style="flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit">
-        <button class="btn btn-primary" onclick="saveKey()" style="white-space:nowrap;font-size:13px">💾 保存</button>
-      </div>
-      <p style="font-size:11px;color:var(--text3)">
-        Key 仅存于浏览器本地，不上传服务器 |
-        <a href="https://aistudio.google.com/" target="_blank" style="color:var(--blue)">免费获取 Gemini Key →</a>
+        服务器尚未配置 Gemini API Key<br>
+        请联系管理员在 Netlify 后台设置 <code>GEMINI_API_KEY</code> 环境变量
       </p>
     </div>
 
@@ -132,38 +124,19 @@ body { font-family:"Inter",-apple-system,BlinkMacSystemFont,"PingFang SC","Micro
 
 <script>
 let aiReady = false;
-const STORAGE_KEY = 'fubao_api_key';
 
-// 初始化
+// 初始化：检查服务器 AI 状态（Key 已在 Netlify 后台配置）
 (async function init() {
-  // 检查浏览器本地是否有 Key
-  const savedKey = localStorage.getItem(STORAGE_KEY);
-  if (savedKey) {
-    document.getElementById('api-key-input').value = savedKey;
-  }
-
-  // 检查服务器 AI 状态（把 Key 放在 query 参数上传递，兼容性最好）
   try {
-    const url = savedKey
-      ? '/api/status?api_key=' + encodeURIComponent(savedKey)
-      : '/api/status';
-    const st = await fetch(url).then(r => r.json());
+    const st = await fetch('/api/status').then(r => r.json());
     aiReady = st.aiAvailable;
   } catch (e) { aiReady = false; }
 
   if (!aiReady) {
     document.getElementById('setup-panel').style.display = 'block';
-    document.getElementById('subtitle').textContent = '配置 API Key 后即可使用 AI 创意生成';
+    document.getElementById('subtitle').textContent = '服务器未配置 Gemini Key，请联系管理员';
   }
 })();
-
-function saveKey() {
-  const key = document.getElementById('api-key-input').value.trim();
-  if (!key) return;
-  localStorage.setItem(STORAGE_KEY, key);
-  // 保存后直接刷新页面，init() 会带着 Key 重新检查状态
-  location.reload();
-}
 
 async function submit() {
   const v = document.getElementById('create-input').value.trim();
@@ -174,14 +147,10 @@ async function submit() {
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> 生成中...';
 
   try {
-    const savedKey = localStorage.getItem(STORAGE_KEY);
-    const body = { requirement: v };
-    if (savedKey) body.api_key = savedKey;
-
     const d = await fetch('/api/create', {
       method:'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+      body: JSON.stringify({ requirement: v })
     })
       .then(r => r.ok ? r.json() : (async()=>{const e=await r.json();throw new Error(e.error||'请求失败')})());
 
@@ -214,13 +183,7 @@ async function submit() {
     document.getElementById('result').innerHTML = html;
     document.getElementById('result').classList.add('show');
   } catch(e) {
-    if (e.message.includes('API') || e.message.includes('Key') || e.message.includes('key')) {
-      document.getElementById('setup-panel').style.display = 'block';
-      errEl.textContent = '';
-      document.getElementById('api-key-input').focus();
-    } else {
-      errEl.textContent = e.message; errEl.style.display = 'block';
-    }
+    errEl.textContent = e.message; errEl.style.display = 'block';
   } finally {
     btn.disabled = false; btn.innerHTML = '💡 生成创意方案';
   }
